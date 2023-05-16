@@ -82,6 +82,29 @@ def parse_json_response(response):
         return response.splitlines()
 
 
+def parse_args_dict(args):
+    """
+    Parse any attribute that will be defined as cli input.
+
+    Args:
+        args (list): List of dict. Formatted as a flag id and value.
+
+    Returns:
+        command (str): A concatenated string with all arguments to pass to the cli after the base command.
+
+    Examples:
+        args = [{'id': 'rosa-cli-required', 'value': 'true'},
+    {'id': 'notification-email', 'value': 'interop-qe-ms@redhat.com'}, {'id': 'cidr-range', 'value': '10.1.0.0/26'}]
+    """
+    command = ""
+    for item in args:
+        command += f" --{item['id']} {item['value']}"
+
+    # Automatically answer yes to confirm operation (relevant for all ROSA commands).
+    command += " -y"
+    return command
+
+
 def execute(command, allowed_commands=None):
     allowed_commands = allowed_commands or parse_help()
     _user_command = shlex.split(command)
