@@ -55,7 +55,7 @@ def parse_help(rosa_cmd="rosa"):
     _commands = get_available_commands(command=[rosa_cmd])
     output_flag_str = "-o, --output"
     auto_answer_yes_str = "-y, --yes"
-    auto_update_str = "-m, --mode"
+    auto_mode_str = "-m, --mode"
 
     for command in _commands:
         commands_dict.setdefault(command, {})
@@ -81,10 +81,10 @@ def parse_help(rosa_cmd="rosa"):
                         flag_str=auto_answer_yes_str,
                     )
                     commands_dict[top_command][command][_command][
-                        "auto_update"
+                        "auto_mode"
                     ] = check_flag_in_flags(
                         command_list=[rosa_cmd, top_command, _command],
-                        flag_str=auto_update_str,
+                        flag_str=auto_mode_str,
                     )
             else:
                 commands_dict[top_command][command][
@@ -99,11 +99,9 @@ def parse_help(rosa_cmd="rosa"):
                     command_list=[rosa_cmd, top_command, command],
                     flag_str=auto_answer_yes_str,
                 )
-                commands_dict[top_command][command][
-                    "auto_update"
-                ] = check_flag_in_flags(
+                commands_dict[top_command][command]["auto_mode"] = check_flag_in_flags(
                     command_list=[rosa_cmd, top_command, command],
-                    flag_str=auto_update_str,
+                    flag_str=auto_mode_str,
                 )
 
     return commands_dict
@@ -139,7 +137,7 @@ def execute(command, allowed_commands=None):
             command.append("--yes")
 
         auto_update = allowed_commands.get(cmd, auto_update.get(cmd, {}))
-        add_auto_update = auto_update.get("auto_update") is True
+        add_auto_update = auto_update.get("auto_mode") is True
         if add_auto_update:
             command.append("--mode auto")
 
