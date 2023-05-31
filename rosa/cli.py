@@ -6,7 +6,11 @@ import re
 import shlex
 import subprocess
 
+<<<<<<< HEAD
 from clouds.aws.aws_utils import verify_aws_credentials
+=======
+import benedict
+>>>>>>> 99cb9a8 (try)
 from simple_logger.logger import get_logger
 
 
@@ -302,6 +306,7 @@ def execute(
         dict: {'out': res.stdout, 'err': res.stderr}
             res.stdout/stderr will be parsed as json if possible, else str
     """
+<<<<<<< HEAD
     _allowed_commands = allowed_commands or parse_help()
 
     if token or ocm_client:
@@ -320,6 +325,39 @@ def execute(
                 allowed_commands=_allowed_commands,
                 aws_region=aws_region,
             )
+=======
+    allowed_commands = allowed_commands or parse_help()
+    _user_command = shlex.split(command)
+    command = ["rosa"]
+    command.extend(_user_command)
+    json_output = {}
+    auto_answer_yes = {}
+    auto_update = {}
+
+    _allowed_commands = benedict.benedict(
+        allowed_commands.copy(), keypath_separator="."
+    )
+    for cmd in command[1:]:
+        if cmd.startswith("--"):
+            continue
+
+        flag = 0
+        if f"{cmd}.json_output" in _allowed_commands:
+            command.append("-ojson")
+            flag = 1
+        json_output = allowed_commands.get(cmd, json_output.get(cmd, {}))
+        add_json_output = json_output.get("json_output") is True
+        if add_json_output:
+            command.append("-ojson")
+
+        if flag != add_json_output:
+            raise
+
+        auto_answer_yes = allowed_commands.get(cmd, auto_answer_yes.get(cmd, {}))
+        add_auto_answer_yes = auto_answer_yes.get("auto_answer_yes") is True
+        if add_auto_answer_yes:
+            command.append("--yes")
+>>>>>>> 99cb9a8 (try)
 
     else:
         if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
