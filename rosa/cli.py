@@ -111,7 +111,7 @@ def parse_json_response(response):
     try:
         return json.loads(response)
     except json.decoder.JSONDecodeError:
-        return response.splitlines()
+        return response
 
 
 def execute(command, allowed_commands=None):
