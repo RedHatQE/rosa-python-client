@@ -131,8 +131,8 @@ def execute(command, allowed_commands=None):
                     }}
 
     Returns:
-        list or json: json if json.loads(res.stdout) not fail,
-        else list of output line by line.
+        str or json: json if json.loads(res.stdout) not fail,
+        else res.stdout.
     """
     allowed_commands = allowed_commands or parse_help()
     _user_command = shlex.split(command)
