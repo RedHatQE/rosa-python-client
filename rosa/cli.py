@@ -114,7 +114,7 @@ def parse_json_response(response):
         return response
 
 
-def execute(command, allowed_commands=None):
+def execute(command, allowed_commands=None, allow_stderr=False):
     """
     Support commands and execute with ROSA cli
 
@@ -129,10 +129,12 @@ def execute(command, allowed_commands=None):
                     'admin': {'json_output': True, 'auto_answer_yes': True, 'auto_mode': False, 'billing_model': False},
                     'cluster': {'json_output': True, 'auto_answer_yes': True, 'auto_mode': True, 'billing_model': False}
                     }}
+        allow_stderr (bool): Use stderr for returned output if True, and get WARN type output from subprocess.
+                                Default is False.
 
     Returns:
         str or json: json if json.loads(res.stdout) not fail,
-        else res.stdout.
+        else res.stdout. (Use res.stdout+res.stderr if allow_stderr is True).
     """
     allowed_commands = allowed_commands or parse_help()
     _user_command = shlex.split(command)
@@ -165,4 +167,6 @@ def execute(command, allowed_commands=None):
 
     LOGGER.info(f"Executing command: {' '.join(command)}")
     res = subprocess.run(command, capture_output=True, check=True, text=True)
-    return parse_json_response(response=res.stdout)
+    return parse_json_response(
+        response=res.stdout + res.stderr if allow_stderr else res.stdout
+    )
