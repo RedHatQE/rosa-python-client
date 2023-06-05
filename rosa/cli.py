@@ -109,9 +109,9 @@ def parse_help(rosa_cmd="rosa"):
 
 def parse_json_response(response):
     try:
-        return json.loads(response.stdout).update({"stderr": response.stderr})
+        return json.loads(response)
     except json.decoder.JSONDecodeError:
-        return {"stdout": response.stdout, "stderr": response.stderr}
+        return response
 
 
 def execute(command, allowed_commands=None):
@@ -131,9 +131,8 @@ def execute(command, allowed_commands=None):
                     }}
 
     Returns:
-        json or dict: json if json.loads(res.stdout) not fail,
-                        else {stdout: (str) res.stdout,
-                            stderr: (str) res.stderr}.
+        dict: {'out': res.stdout, 'err': res.stderr}
+                res.stdout/stderr will be parsed as json if possible, else str
     """
     allowed_commands = allowed_commands or parse_help()
     _user_command = shlex.split(command)
@@ -166,4 +165,7 @@ def execute(command, allowed_commands=None):
 
     LOGGER.info(f"Executing command: {' '.join(command)}")
     res = subprocess.run(command, capture_output=True, check=True, text=True)
-    return parse_json_response(response=res)
+    return {
+        "out": parse_json_response(response=res.stdout),
+        "err": parse_json_response(response=res.stderr),
+    }
