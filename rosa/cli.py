@@ -10,7 +10,6 @@ import subprocess
 from clouds.aws.aws_utils import verify_aws_credentials
 =======
 import benedict
->>>>>>> 99cb9a8 (try)
 from simple_logger.logger import get_logger
 
 
@@ -330,41 +329,37 @@ def execute(
     _user_command = shlex.split(command)
     command = ["rosa"]
     command.extend(_user_command)
-    json_output = {}
-    auto_answer_yes = {}
-    auto_update = {}
-
-    _allowed_commands = benedict.benedict(
-        allowed_commands.copy(), keypath_separator="."
-    )
-    for cmd in command[1:]:
+    _allowed_commands = benedict.benedict(allowed_commands.copy())
+    key_path = []
+    for cmd in _user_command:
         if cmd.startswith("--"):
             continue
+        key_path.append(cmd)
 
-        flag = 0
-        if f"{cmd}.json_output" in _allowed_commands:
-            command.append("-ojson")
-            flag = 1
-        json_output = allowed_commands.get(cmd, json_output.get(cmd, {}))
-        add_json_output = json_output.get("json_output") is True
-        if add_json_output:
+        if _allowed_commands[key_path].get("json_output"):
             command.append("-ojson")
 
-        if flag != add_json_output:
-            raise
-
-        auto_answer_yes = allowed_commands.get(cmd, auto_answer_yes.get(cmd, {}))
-        add_auto_answer_yes = auto_answer_yes.get("auto_answer_yes") is True
-        if add_auto_answer_yes:
+        if _allowed_commands[key_path].get("auto_answer_yes"):
             command.append("--yes")
 >>>>>>> 99cb9a8 (try)
 
+        if _allowed_commands[key_path].get("auto_mode"):
+            command.append("--mode=auto")
     else:
         if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
             raise NotLoggedInError(
                 "Not logged in to OCM, either pass 'token' or log in before running."
             )
 
+        if any(
+            atr in _allowed_commands[key_path]
+            for atr in ["json_output", "auto_answer_yes", "auto_mode"]
+        ):
+            break
+
+    LOGGER.info(f"Executing command: {' '.join(command)}")
+    res = subprocess.run(command, capture_output=True, check=True, text=True)
+    return parse_json_response(response=res)
         return build_execute_command(
             command=command, allowed_commands=_allowed_commands, aws_region=aws_region
         )
