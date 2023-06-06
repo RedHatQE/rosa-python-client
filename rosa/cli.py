@@ -108,10 +108,16 @@ def parse_help(rosa_cmd="rosa"):
 
 
 def parse_json_response(response):
-    try:
-        return json.loads(response)
-    except json.decoder.JSONDecodeError:
-        return response
+    def _try_json_load(arg):
+        try:
+            return json.loads(arg)
+        except json.decoder.JSONDecodeError:
+            return arg
+
+    return {
+        "out": _try_json_load(response.stdout),
+        "err": _try_json_load(response.stderr),
+    }
 
 
 def execute(command, allowed_commands=None):
@@ -165,7 +171,4 @@ def execute(command, allowed_commands=None):
 
     LOGGER.info(f"Executing command: {' '.join(command)}")
     res = subprocess.run(command, capture_output=True, check=True, text=True)
-    return {
-        "out": parse_json_response(response=res.stdout),
-        "err": parse_json_response(response=res.stderr),
-    }
+    return parse_json_response(response=res)
