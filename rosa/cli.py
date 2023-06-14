@@ -1,3 +1,4 @@
+import functools
 import json
 import re
 import shlex
@@ -54,6 +55,7 @@ def get_available_flags(command):
     return []
 
 
+@functools.cache
 def parse_help(rosa_cmd="rosa"):
     commands_dict = {}
     _commands = get_available_commands(command=[rosa_cmd])
