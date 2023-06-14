@@ -209,6 +209,8 @@ def execute(command, allowed_commands=None, stage_env=False, token=None):
     """
     Support commands and execute with ROSA cli
 
+    If 'token' is passed, log in to rosa execute the command and then logout.
+
     Args:
         command (str): ROSA cli command to execute
         allowed_commands (dict): Commands dict of dicts with following
