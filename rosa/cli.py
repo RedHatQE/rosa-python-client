@@ -9,6 +9,10 @@ from simple_logger.logger import get_logger
 LOGGER = get_logger(__name__)
 
 
+class CommandExecuteError(Exception):
+    pass
+
+
 def check_flag_in_flags(command_list, flag_str):
     available_flags = get_available_flags(command=command_list)
     for flag in available_flags:
@@ -170,5 +174,8 @@ def execute(command, allowed_commands=None):
             break
 
     LOGGER.info(f"Executing command: {' '.join(command)}")
-    res = subprocess.run(command, capture_output=True, check=True, text=True)
+    res = subprocess.run(command, capture_output=True, text=True)
+    if res.returncode != 0:
+        raise CommandExecuteError(f"Failed to execute: {res.stderr}")
+
     return parse_json_response(response=res)
