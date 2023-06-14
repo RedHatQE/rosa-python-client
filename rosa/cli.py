@@ -22,10 +22,10 @@ class NotLoggedInError(Exception):
 
 
 @contextlib.contextmanager
-def rosa_login_logout(stage_env, token):
+def rosa_login_logout(env, token):
     execute_command(
         command=shlex.split(
-            f"{ROSA_STR} login {'--env=staging' if stage_env else ''} --token={token}"
+            f"{ROSA_STR} login {f'--env={env}' if env else ''} --token={token}"
         )
     )
     yield
@@ -205,18 +205,21 @@ def parse_json_response(response):
     }
 
 
-def execute(command, allowed_commands=None, stage_env=False, token=None):
+def execute(
+    command, allowed_commands=None, ocm_env="production", token=None, ocm_client=None
+):
     """
     Support commands and execute with ROSA cli
 
-    If 'token' is passed, log in to rosa execute the command and then logout.
+    If 'token' or 'ocm_client' is passed, log in to rosa execute the command and then logout.
 
     Args:
-        command (str): ROSA cli command to execute
+        command (str): ROSA cli command to execute.
         allowed_commands (dict): Commands dict of dicts with following
-            options for each entry
-        stage_env (bool): True to log in into staging (production is the default).
+            options for each entry.
+        ocm_env (str): OCM env to log in into.
         token (str): Access or refresh token generated from https://console.redhat.com/openshift/token/rosa.
+        ocm_client (OCMPythonClient): OCM client to use for log in.
 
     Example:
         allowed_commands = {'create':
@@ -228,13 +231,15 @@ def execute(command, allowed_commands=None, stage_env=False, token=None):
 
     Returns:
         dict: {'out': res.stdout, 'err': res.stderr}
-                res.stdout/stderr will be parsed as json if possible, else str
+            res.stdout/stderr will be parsed as json if possible, else str
     """
     _allowed_commands = allowed_commands or parse_help()
-    if token:
-        with change_home_environment(), rosa_login_logout(
-            stage_env=stage_env, token=token
-        ):
+    if token or ocm_client:
+        if ocm_client:
+            ocm_env = ocm_client.api_client.configuration.host
+            token = ocm_client.api_client.token
+
+        with change_home_environment(), rosa_login_logout(env=ocm_env, token=token):
             command = build_command(command=command, allowed_commands=_allowed_commands)
             return execute_command(command=command)
 
