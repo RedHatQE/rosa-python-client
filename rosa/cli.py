@@ -60,7 +60,6 @@ def execute_command(command):
     LOGGER.info(
         f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token ', joined_command)}"
     )
-    ###########
     res = subprocess.run(command, capture_output=True, text=True)
     if res.returncode != 0:
         raise CommandExecuteError(f"Failed to execute: {res.stderr}")
