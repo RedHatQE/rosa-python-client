@@ -291,7 +291,6 @@ def execute(
             aws_region=aws_region,
             allowed_commands=_allowed_commands,
         ):
-            execute("whoami")
             return build_execute_command(
                 command=command,
                 allowed_commands=_allowed_commands,
