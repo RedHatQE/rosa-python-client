@@ -17,7 +17,10 @@ class CommandExecuteError(Exception):
 
 
 class NotLoggedInError(Exception):
-    pass
+    def __init__(self):
+        super().__init__(
+            "Not logged in to OCM, either pass 'token' or log in before running."
+        )
 
 
 @contextlib.contextmanager
@@ -27,6 +30,8 @@ def rosa_login_logout(env, token, aws_region, allowed_commands=None):
         command=f"login --region {aws_region} {f'--env={env}' if env else ''} --token={token}",
         allowed_commands=_allowed_commands,
     )
+    if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
+        raise NotLoggedInError()
     yield
     build_execute_command(command="logout", allowed_commands=_allowed_commands)
 
@@ -55,6 +60,7 @@ def execute_command(command):
     LOGGER.info(
         f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token ', joined_command)}"
     )
+    ###########
     res = subprocess.run(command, capture_output=True, text=True)
     if res.returncode != 0:
         raise CommandExecuteError(f"Failed to execute: {res.stderr}")
@@ -289,9 +295,7 @@ def execute(
 
     else:
         if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
-            raise NotLoggedInError(
-                "Not logged in to OCM, either pass 'token' or log in before running."
-            )
+            raise NotLoggedInError()
 
         return build_execute_command(
             command=command, allowed_commands=_allowed_commands, aws_region=aws_region
