@@ -6,13 +6,11 @@ import re
 import shlex
 import subprocess
 
-from ocp_resources.utils import TimeoutSampler
 from simple_logger.logger import get_logger
 
 
 LOGGER = get_logger(__name__)
 TIMEOUT_5MIN = 5 * 60
-SLEEP_1SEC = 1
 
 
 class CommandExecuteError(Exception):
@@ -53,22 +51,16 @@ def is_logged_in(aws_region=None, allowed_commands=None):
         return False
 
 
-def execute_command(command):
-    def _wait_for_command_execution(_command):
-        for result in TimeoutSampler(
-            wait_timeout=TIMEOUT_5MIN,
-            sleep=SLEEP_1SEC,
-            func=lambda: subprocess.run(_command, capture_output=True, text=True),
-        ):
-            if result.returncode != 0:
-                raise CommandExecuteError(f"Failed to execute: {result.stderr}")
-            return result
-
+def execute_command(command, wait_timeout=TIMEOUT_5MIN):
     joined_command = " ".join(command)
     LOGGER.info(
-        f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token ', joined_command)}"
+        f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token', joined_command)}, "
+        f"waiting for {wait_timeout} seconds."
     )
-    res = _wait_for_command_execution(_command=command)
+    res = subprocess.run(command, capture_output=True, text=True, timeout=wait_timeout)
+    if res.returncode != 0:
+        raise CommandExecuteError(f"Failed to execute: {res.stderr}")
+
     return parse_json_response(response=res)
 
 
