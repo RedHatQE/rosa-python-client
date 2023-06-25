@@ -6,10 +6,13 @@ import re
 import shlex
 import subprocess
 
+from ocp_resources.utils import TimeoutSampler
 from simple_logger.logger import get_logger
 
 
 LOGGER = get_logger(__name__)
+TIMEOUT_5MIN = 5 * 60
+SLEEP_1SEC = 1
 
 
 class CommandExecuteError(Exception):
@@ -51,11 +54,20 @@ def is_logged_in(aws_region=None, allowed_commands=None):
 
 
 def execute_command(command):
+    def _wait_for_command_execution(_command):
+        for result in TimeoutSampler(
+            wait_timeout=TIMEOUT_5MIN,
+            sleep=SLEEP_1SEC,
+            func=subprocess.run(command, capture_output=True, text=True),
+        ):
+            return result
+
     joined_command = " ".join(command)
     LOGGER.info(
         f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token ', joined_command)}"
     )
-    res = subprocess.run(command, capture_output=True, text=True)
+    res = _wait_for_command_execution(_command=command)
+    # res = subprocess.run(command, capture_output=True, text=True)
     if res.returncode != 0:
         raise CommandExecuteError(f"Failed to execute: {res.stderr}")
 
@@ -281,6 +293,7 @@ def execute(
             aws_region=aws_region,
             allowed_commands=_allowed_commands,
         ):
+            execute("whoami")
             return build_execute_command(
                 command=command,
                 allowed_commands=_allowed_commands,
