@@ -58,8 +58,10 @@ def execute_command(command):
         for result in TimeoutSampler(
             wait_timeout=TIMEOUT_5MIN,
             sleep=SLEEP_1SEC,
-            func=subprocess.run(command, capture_output=True, text=True),
+            func=lambda: subprocess.run(_command, capture_output=True, text=True),
         ):
+            if result.returncode != 0:
+                raise CommandExecuteError(f"Failed to execute: {result.stderr}")
             return result
 
     joined_command = " ".join(command)
@@ -67,10 +69,6 @@ def execute_command(command):
         f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token ', joined_command)}"
     )
     res = _wait_for_command_execution(_command=command)
-    # res = subprocess.run(command, capture_output=True, text=True)
-    if res.returncode != 0:
-        raise CommandExecuteError(f"Failed to execute: {res.stderr}")
-
     return parse_json_response(response=res)
 
 
