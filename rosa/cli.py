@@ -6,6 +6,7 @@ import re
 import shlex
 import subprocess
 
+from clouds.aws.aws_utils import verify_aws_credentials
 from simple_logger.logger import get_logger
 
 
@@ -22,11 +23,15 @@ class NotLoggedInError(Exception):
 
 @contextlib.contextmanager
 def rosa_login_logout(env, token, aws_region, allowed_commands=None):
+    verify_aws_credentials()
     _allowed_commands = allowed_commands or parse_help()
     build_execute_command(
         command=f"login --region {aws_region} {f'--env={env}' if env else ''} --token={token}",
         allowed_commands=_allowed_commands,
     )
+    if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
+        raise NotLoggedInError("Failed to login to AWS.")
+
     yield
     build_execute_command(command="logout", allowed_commands=_allowed_commands)
 
