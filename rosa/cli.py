@@ -163,57 +163,81 @@ def parse_help(rosa_cmd="rosa"):
 
     for top_command in commands_dict.keys():
         _commands = get_available_commands(command=[rosa_cmd, top_command])
-        for command in _commands:
-            commands_dict[top_command][command] = {}
-            _commands = get_available_commands(command=[rosa_cmd, top_command, command])
-            if _commands:
-                for _command in _commands:
-                    commands_dict[top_command][command][_command] = {}
-                    commands_dict[top_command][command][_command][
+
+        if _commands:
+            for command in _commands:
+                commands_dict[top_command][command] = {}
+                _commands = get_available_commands(
+                    command=[rosa_cmd, top_command, command]
+                )
+                if _commands:
+                    for _command in _commands:
+                        commands_dict[top_command][command][_command] = {}
+                        commands_dict[top_command][command][_command][
+                            "json_output"
+                        ] = check_flag_in_flags(
+                            command_list=[rosa_cmd, top_command, _command],
+                            flag_str=output_flag_str,
+                        )
+                        commands_dict[top_command][command][_command][
+                            "auto_answer_yes"
+                        ] = check_flag_in_flags(
+                            command_list=[rosa_cmd, top_command, _command],
+                            flag_str=auto_answer_yes_str,
+                        )
+                        commands_dict[top_command][command][_command][
+                            "auto_mode"
+                        ] = check_flag_in_flags(
+                            command_list=[rosa_cmd, top_command, _command],
+                            flag_str=auto_mode_str,
+                        )
+                        commands_dict[top_command][command][_command][
+                            "region"
+                        ] = check_flag_in_flags(
+                            command_list=[rosa_cmd, top_command, _command],
+                            flag_str=region_str,
+                        )
+                else:
+                    commands_dict[top_command][command][
                         "json_output"
                     ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, _command],
+                        command_list=[rosa_cmd, top_command, command],
                         flag_str=output_flag_str,
                     )
-                    commands_dict[top_command][command][_command][
+                    commands_dict[top_command][command][
                         "auto_answer_yes"
                     ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, _command],
+                        command_list=[rosa_cmd, top_command, command],
                         flag_str=auto_answer_yes_str,
                     )
-                    commands_dict[top_command][command][_command][
+                    commands_dict[top_command][command][
                         "auto_mode"
                     ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, _command],
+                        command_list=[rosa_cmd, top_command, command],
                         flag_str=auto_mode_str,
                     )
-                    commands_dict[top_command][command][_command][
-                        "region"
-                    ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, _command],
+                    commands_dict[top_command][command]["region"] = check_flag_in_flags(
+                        command_list=[rosa_cmd, top_command, command],
                         flag_str=region_str,
                     )
-            else:
-                commands_dict[top_command][command][
-                    "json_output"
-                ] = check_flag_in_flags(
-                    command_list=[rosa_cmd, top_command, command],
-                    flag_str=output_flag_str,
-                )
-                commands_dict[top_command][command][
-                    "auto_answer_yes"
-                ] = check_flag_in_flags(
-                    command_list=[rosa_cmd, top_command, command],
-                    flag_str=auto_answer_yes_str,
-                )
-                commands_dict[top_command][command]["auto_mode"] = check_flag_in_flags(
-                    command_list=[rosa_cmd, top_command, command],
-                    flag_str=auto_mode_str,
-                )
-                commands_dict[top_command][command]["region"] = check_flag_in_flags(
-                    command_list=[rosa_cmd, top_command, command],
-                    flag_str=region_str,
-                )
+
+        else:
+            commands_dict[top_command]["json_output"] = check_flag_in_flags(
+                command_list=[rosa_cmd, top_command],
+                flag_str=output_flag_str,
+            )
+            commands_dict[top_command]["auto_answer_yes"] = check_flag_in_flags(
+                command_list=[rosa_cmd, top_command],
+                flag_str=auto_answer_yes_str,
+            )
+            commands_dict[top_command]["auto_mode"] = check_flag_in_flags(
+                command_list=[rosa_cmd, top_command],
+                flag_str=auto_mode_str,
+            )
+            commands_dict[top_command]["region"] = check_flag_in_flags(
+                command_list=[rosa_cmd, top_command],
+                flag_str=region_str,
+            )
 
     return commands_dict
 
