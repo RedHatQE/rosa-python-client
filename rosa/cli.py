@@ -79,17 +79,16 @@ def check_flag_in_flags(command_list, flag_str):
 
 def build_command(command, allowed_commands=None, aws_region=None):
     _allowed_commands = benedict.benedict(allowed_commands or parse_help())
-
     _user_command = shlex.split(command)
     command = ["rosa"]
     command.extend(_user_command)
-
-    key_path = []
     var_list = {
         "json_output": "ojson",
         "auto_answer_yes": "--yes",
         "auto_mode": "--mode=auto",
     }
+
+    key_path = []
     for cmd in _user_command:
         if cmd.startswith("--"):
             continue
@@ -142,100 +141,50 @@ def get_available_flags(command):
 
 @functools.cache
 def parse_help(rosa_cmd="rosa"):
-    # TODO !!!
-    commands_dict = {}
+    commands_dict = benedict.benedict()
+    var_list = {
+        "json_output": "-o, --output",
+        "auto_answer_yes": "-y, --yes",
+        "auto_mode": "-m, --mode",
+        "region": "--region",
+    }
+
+    def _fill_path(key_path):
+        for key, value in var_list.items():
+            commands_dict[key_path][key] = check_flag_in_flags(
+                command_list=["rosa"] + key_path,
+                flag_str=value,
+            )
+
     _commands = get_available_commands(command=[rosa_cmd])
-    output_flag_str = "-o, --output"
-    auto_answer_yes_str = "-y, --yes"
-    auto_mode_str = "-m, --mode"
-    region_str = "--region"
 
     for command in _commands:
         commands_dict.setdefault(command, {})
 
     for top_command in commands_dict.keys():
-        _commands = get_available_commands(command=[rosa_cmd, top_command])
+        key_path = [top_command]
+        _commands = get_available_commands(command=["rosa"] + key_path)
 
         if _commands:
             # If top command has sub command
             for command in _commands:
-                commands_dict[top_command][command] = {}
-                _commands = get_available_commands(
-                    command=[rosa_cmd, top_command, command]
-                )
+                key_path = [top_command, command]
+                commands_dict[key_path] = {}
+                _commands = get_available_commands(command=["rosa"] + key_path)
                 if _commands:
                     # If sub command has sub command
                     for _command in _commands:
-                        commands_dict[top_command][command][_command] = {}
-                        commands_dict[top_command][command][_command][
-                            "json_output"
-                        ] = check_flag_in_flags(
-                            command_list=[rosa_cmd, top_command, _command],
-                            flag_str=output_flag_str,
-                        )
-                        commands_dict[top_command][command][_command][
-                            "auto_answer_yes"
-                        ] = check_flag_in_flags(
-                            command_list=[rosa_cmd, top_command, _command],
-                            flag_str=auto_answer_yes_str,
-                        )
-                        commands_dict[top_command][command][_command][
-                            "auto_mode"
-                        ] = check_flag_in_flags(
-                            command_list=[rosa_cmd, top_command, _command],
-                            flag_str=auto_mode_str,
-                        )
-                        commands_dict[top_command][command][_command][
-                            "region"
-                        ] = check_flag_in_flags(
-                            command_list=[rosa_cmd, top_command, _command],
-                            flag_str=region_str,
-                        )
+                        key_path = [top_command, command, _command]
+                        commands_dict[key_path] = {}
+                        _fill_path(key_path)
                 else:
                     # If sub command doesn't have sub command
-                    commands_dict[top_command][command][
-                        "json_output"
-                    ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, command],
-                        flag_str=output_flag_str,
-                    )
-                    commands_dict[top_command][command][
-                        "auto_answer_yes"
-                    ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, command],
-                        flag_str=auto_answer_yes_str,
-                    )
-                    commands_dict[top_command][command][
-                        "auto_mode"
-                    ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, command],
-                        flag_str=auto_mode_str,
-                    )
-                    commands_dict[top_command][command]["region"] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, command],
-                        flag_str=region_str,
-                    )
-
+                    _fill_path(key_path)
         else:
             # If top command doesn't have sub command
-            commands_dict[top_command]["json_output"] = check_flag_in_flags(
-                command_list=[rosa_cmd, top_command],
-                flag_str=output_flag_str,
-            )
-            commands_dict[top_command]["auto_answer_yes"] = check_flag_in_flags(
-                command_list=[rosa_cmd, top_command],
-                flag_str=auto_answer_yes_str,
-            )
-            commands_dict[top_command]["auto_mode"] = check_flag_in_flags(
-                command_list=[rosa_cmd, top_command],
-                flag_str=auto_mode_str,
-            )
-            commands_dict[top_command]["region"] = check_flag_in_flags(
-                command_list=[rosa_cmd, top_command],
-                flag_str=region_str,
-            )
+            _fill_path(key_path)
 
-    return commands_dict
+    return dict(commands_dict)
 
 
 def parse_json_response(response):
