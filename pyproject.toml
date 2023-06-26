@@ -10,7 +10,7 @@ packages = [{include = "rosa"}]
 python = "^3.8"
 python-simple-logger = "*"
 redhat-qe-cloud-tools = "^1.0.6"
-
+python-benedict = "*"
 
 [tool.poetry.group.dev.dependencies]
 ipdb = "^0.13.13"
