@@ -6,10 +6,8 @@ import re
 import shlex
 import subprocess
 
-<<<<<<< HEAD
-from clouds.aws.aws_utils import verify_aws_credentials
-=======
 import benedict
+from clouds.aws.aws_utils import verify_aws_credentials
 from simple_logger.logger import get_logger
 
 
@@ -80,43 +78,32 @@ def check_flag_in_flags(command_list, flag_str):
 
 
 def build_command(command, allowed_commands=None, aws_region=None):
-    _allowed_commands = allowed_commands or parse_help()
+    _allowed_commands = benedict.benedict(allowed_commands or parse_help())
+
     _user_command = shlex.split(command)
     command = ["rosa"]
     command.extend(_user_command)
-    json_output = {}
-    auto_answer_yes = {}
-    auto_update = {}
-    aws_region_flag = {}
-    for cmd in command[1:]:
+
+    key_path = []
+    var_list = {
+        "json_output": "ojson",
+        "auto_answer_yes": "--yes",
+        "auto_mode": "--mode=auto",
+    }
+    for cmd in _user_command:
         if cmd.startswith("--"):
             continue
+        key_path.append(cmd)
 
-        json_output = _allowed_commands.get(cmd, json_output.get(cmd, {}))
-        add_json_output = json_output.get("json_output") is True
-        if add_json_output:
-            command.append("-ojson")
+        for key, value in var_list.items():
+            if _allowed_commands[key_path].get(key, {}):
+                command.append(value)
 
-        auto_answer_yes = _allowed_commands.get(cmd, auto_answer_yes.get(cmd, {}))
-        add_auto_answer_yes = auto_answer_yes.get("auto_answer_yes") is True
-        if add_auto_answer_yes:
-            command.append("--yes")
-
-        auto_update = _allowed_commands.get(cmd, auto_update.get(cmd, {}))
-        add_auto_update = auto_update.get("auto_mode") is True
-        if add_auto_update:
-            command.append("--mode=auto")
-
-        aws_region_flag = _allowed_commands.get(cmd, aws_region_flag.get(cmd, {}))
-        add_aws_region_flag = json_output.get("region") is True
-        if add_aws_region_flag and aws_region:
+        if _allowed_commands[key_path].get("region", {}) and aws_region:
             command.append(f"--region={aws_region}")
 
-        if any(
-            [add_json_output, add_auto_answer_yes, add_auto_update, add_aws_region_flag]
-        ):
+        if any(atr in _allowed_commands[key_path] for atr in var_list.keys()):
             break
-
     return command
 
 
@@ -155,6 +142,7 @@ def get_available_flags(command):
 
 @functools.cache
 def parse_help(rosa_cmd="rosa"):
+    # TODO !!!
     commands_dict = {}
     _commands = get_available_commands(command=[rosa_cmd])
     output_flag_str = "-o, --output"
@@ -305,7 +293,6 @@ def execute(
         dict: {'out': res.stdout, 'err': res.stderr}
             res.stdout/stderr will be parsed as json if possible, else str
     """
-<<<<<<< HEAD
     _allowed_commands = allowed_commands or parse_help()
 
     if token or ocm_client:
@@ -324,42 +311,11 @@ def execute(
                 allowed_commands=_allowed_commands,
                 aws_region=aws_region,
             )
-=======
-    allowed_commands = allowed_commands or parse_help()
-    _user_command = shlex.split(command)
-    command = ["rosa"]
-    command.extend(_user_command)
-    _allowed_commands = benedict.benedict(allowed_commands.copy())
-    key_path = []
-    for cmd in _user_command:
-        if cmd.startswith("--"):
-            continue
-        key_path.append(cmd)
-
-        if _allowed_commands[key_path].get("json_output"):
-            command.append("-ojson")
-
-        if _allowed_commands[key_path].get("auto_answer_yes"):
-            command.append("--yes")
->>>>>>> 99cb9a8 (try)
-
-        if _allowed_commands[key_path].get("auto_mode"):
-            command.append("--mode=auto")
     else:
         if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
             raise NotLoggedInError(
                 "Not logged in to OCM, either pass 'token' or log in before running."
             )
-
-        if any(
-            atr in _allowed_commands[key_path]
-            for atr in ["json_output", "auto_answer_yes", "auto_mode"]
-        ):
-            break
-
-    LOGGER.info(f"Executing command: {' '.join(command)}")
-    res = subprocess.run(command, capture_output=True, check=True, text=True)
-    return parse_json_response(response=res)
         return build_execute_command(
             command=command, allowed_commands=_allowed_commands, aws_region=aws_region
         )
