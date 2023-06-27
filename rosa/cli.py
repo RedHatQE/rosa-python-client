@@ -1,3 +1,4 @@
+import configparser
 import contextlib
 import functools
 import json
@@ -6,11 +7,14 @@ import re
 import shlex
 import subprocess
 
-from clouds.aws.aws_utils import verify_aws_credentials
 from simple_logger.logger import get_logger
 
 
 LOGGER = get_logger(__name__)
+
+
+class MissingAWSCredentials(Exception):
+    pass
 
 
 class CommandExecuteError(Exception):
@@ -23,7 +27,6 @@ class NotLoggedInError(Exception):
 
 @contextlib.contextmanager
 def rosa_login_logout(env, token, aws_region, allowed_commands=None):
-    verify_aws_credentials()
     _allowed_commands = allowed_commands or parse_help()
     build_execute_command(
         command=f"login {f'--env={env}' if env else ''} --token={token}",
@@ -268,6 +271,28 @@ def build_execute_command(command, allowed_commands=None, aws_region=None):
     return execute_command(command=command)
 
 
+def aws_credentials():
+    aws_config_file = os.path.expanduser("~/.aws/credentials")
+    aws_access_key_id = os.environ.get("AWS_ACCESS_KEY_ID")
+    aws_secret_access_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+    if not aws_access_key_id and aws_secret_access_key:
+        config = configparser.ConfigParser()
+        config.read(aws_config_file)
+        if config.has_section("default"):
+            default_section = config["default"]
+            aws_access_key_id = default_section.get("aws_access_key_id")
+            aws_secret_access_key = default_section.get("aws_secret_access_key")
+
+    if not aws_access_key_id and aws_secret_access_key:
+        raise MissingAWSCredentials(
+            "aws_access_key_id and aws_secret_access_key was not found "
+            f"in OS environment and not in {aws_config_file}"
+        )
+
+    os.environ["AWS_ACCESS_KEY_ID"] = aws_access_key_id
+    os.environ["AWS_SECRET_ACCESS_KEY"] = aws_secret_access_key
+
+
 def execute(
     command,
     allowed_commands=None,
@@ -305,6 +330,8 @@ def execute(
     _allowed_commands = allowed_commands or parse_help()
 
     if token or ocm_client:
+        aws_credentials()
+
         if ocm_client:
             ocm_env = ocm_client.api_client.configuration.host
             token = ocm_client.api_client.token
@@ -330,3 +357,9 @@ def execute(
         return build_execute_command(
             command=command, allowed_commands=_allowed_commands, aws_region=aws_region
         )
+
+
+if __name__ == "__main__":
+    """
+    for local debugging.
+    """
