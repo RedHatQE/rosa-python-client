@@ -99,17 +99,17 @@ def build_command(command, allowed_commands=None, aws_region=None):
             continue
         flag_search_path.append(cmd)
 
-        for cli_flag, flag_value in support_commands.items():
-            if _allowed_commands[flag_search_path].get(cli_flag, {}):
-                command.append(flag_value)
-
-        if _allowed_commands[flag_search_path].get("region", {}) and aws_region:
-            command.append(f"--region={aws_region}")
-
         if any(
             flag in _allowed_commands[flag_search_path]
             for flag in support_commands.keys()
         ):
+            for cli_flag, flag_value in support_commands.items():
+                if _allowed_commands[flag_search_path].get(cli_flag, {}):
+                    command.append(flag_value)
+
+            if _allowed_commands[flag_search_path].get("region", {}) and aws_region:
+                command.append(f"--region={aws_region}")
+
             break
 
     return command
