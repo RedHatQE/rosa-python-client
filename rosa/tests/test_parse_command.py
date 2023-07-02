@@ -4,9 +4,6 @@ from benedict import benedict
 from rosa.cli import build_command, parse_help
 
 
-CREATE_CLUSTER_CMD = "create cluster"
-
-
 @pytest.mark.parametrize(
     "cmd,aws_region",
     [
