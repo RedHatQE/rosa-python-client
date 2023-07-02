@@ -6,7 +6,7 @@ import re
 import shlex
 import subprocess
 
-from benedict import benedict
+import benedict
 from clouds.aws.aws_utils import set_and_verify_aws_credentials
 from simple_logger.logger import get_logger
 
@@ -87,26 +87,29 @@ def build_command(command, allowed_commands=None, aws_region=None):
     _user_command = shlex.split(command)
     command = ["rosa"]
     command.extend(_user_command)
-    var_list = {
-        "json_output": "ojson",
+    support_commands = {
+        "json_output": "-ojson",
         "auto_answer_yes": "--yes",
         "auto_mode": "--mode=auto",
     }
 
-    key_path = []
+    flag_search_path = []
     for cmd in _user_command:
         if cmd.startswith("--"):
             continue
-        key_path.append(cmd)
+        flag_search_path.append(cmd)
 
-        for key, value in var_list.items():
-            if _allowed_commands[key_path].get(key, {}):
-                command.append(value)
+        for cli_flag, flag_value in support_commands.items():
+            if _allowed_commands[flag_search_path].get(cli_flag, {}):
+                command.append(flag_value)
 
-        if _allowed_commands[key_path].get("region", {}) and aws_region:
+        if _allowed_commands[flag_search_path].get("region", {}) and aws_region:
             command.append(f"--region={aws_region}")
 
-        if any(atr in _allowed_commands[key_path] for atr in var_list.keys()):
+        if any(
+            flag in _allowed_commands[flag_search_path]
+            for flag in support_commands.keys()
+        ):
             break
 
     return command
@@ -148,18 +151,18 @@ def get_available_flags(command):
 @functools.cache
 def parse_help(rosa_cmd="rosa"):
     commands_dict = benedict.benedict()
-    var_list = {
-        "json_output": "-o, --output",
-        "auto_answer_yes": "-y, --yes",
-        "auto_mode": "-m, --mode",
-        "region": "--region",
-    }
 
-    def _fill_path(key_path):
-        for key, value in var_list.items():
-            commands_dict[key_path][key] = check_flag_in_flags(
-                command_list=["rosa"] + key_path,
-                flag_str=value,
+    def _fill_commands_dict_with_support_flags(flag_key_path):
+        support_commands = {
+            "json_output": "-o, --output",
+            "auto_answer_yes": "-y, --yes",
+            "auto_mode": "-m, --mode",
+            "region": "--region",
+        }
+        for cli_flag, flag_value in support_commands.items():
+            commands_dict[flag_key_path][cli_flag] = check_flag_in_flags(
+                command_list=["rosa"] + flag_key_path,
+                flag_str=flag_value,
             )
 
     _commands = get_available_commands(command=[rosa_cmd])
@@ -168,27 +171,31 @@ def parse_help(rosa_cmd="rosa"):
         commands_dict.setdefault(command, {})
 
     for top_command in commands_dict.keys():
-        key_path = [top_command]
-        _commands = get_available_commands(command=["rosa"] + key_path)
+        flag_search_path = [top_command]
+        _commands = get_available_commands(command=["rosa"] + flag_search_path)
 
         if _commands:
             # If top command has sub command
             for command in _commands:
-                key_path = [top_command, command]
-                commands_dict[key_path] = {}
-                _commands = get_available_commands(command=["rosa"] + key_path)
+                flag_search_path = [top_command, command]
+                commands_dict[flag_search_path] = {}
+                _commands = get_available_commands(command=["rosa"] + flag_search_path)
                 if _commands:
                     # If sub command has sub command
                     for _command in _commands:
-                        key_path = [top_command, command, _command]
-                        commands_dict[key_path] = {}
-                        _fill_path(key_path)
+                        flag_search_path = [top_command, command, _command]
+                        commands_dict[flag_search_path] = {}
+                        _fill_commands_dict_with_support_flags(
+                            flag_key_path=flag_search_path
+                        )
                 else:
                     # If sub command doesn't have sub command
-                    _fill_path(key_path)
+                    _fill_commands_dict_with_support_flags(
+                        flag_key_path=flag_search_path
+                    )
         else:
             # If top command doesn't have sub command
-            _fill_path(key_path)
+            _fill_commands_dict_with_support_flags(flag_key_path=flag_search_path)
 
     return dict(commands_dict)
 
@@ -268,7 +275,6 @@ def execute(
                 allowed_commands=_allowed_commands,
                 aws_region=aws_region,
             )
-
     else:
         if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
             raise NotLoggedInError(
