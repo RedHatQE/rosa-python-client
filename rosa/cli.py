@@ -197,7 +197,7 @@ def parse_help(rosa_cmd="rosa"):
             # If top command doesn't have sub command
             _fill_commands_dict_with_support_flags(flag_key_path=flag_search_path)
 
-    return dict(commands_dict)
+    return commands_dict
 
 
 def parse_json_response(response):
