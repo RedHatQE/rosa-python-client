@@ -6,12 +6,17 @@ import re
 import shlex
 import subprocess
 
-import benedict
-from clouds.aws.aws_utils import verify_aws_credentials
+from benedict import benedict
+from clouds.aws.aws_utils import set_and_verify_aws_credentials
 from simple_logger.logger import get_logger
 
 
 LOGGER = get_logger(__name__)
+TIMEOUT_5MIN = 5 * 60
+
+
+class MissingAWSCredentials(Exception):
+    pass
 
 
 class CommandExecuteError(Exception):
@@ -24,7 +29,6 @@ class NotLoggedInError(Exception):
 
 @contextlib.contextmanager
 def rosa_login_logout(env, token, aws_region, allowed_commands=None):
-    verify_aws_credentials()
     _allowed_commands = allowed_commands or parse_help()
     build_execute_command(
         command=f"login {f'--env={env}' if env else ''} --token={token}",
@@ -57,12 +61,13 @@ def is_logged_in(aws_region=None, allowed_commands=None):
         return False
 
 
-def execute_command(command):
+def execute_command(command, wait_timeout=TIMEOUT_5MIN):
     joined_command = " ".join(command)
     LOGGER.info(
-        f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token ', joined_command)}"
+        f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token', joined_command)}, "
+        f"waiting for {wait_timeout} seconds."
     )
-    res = subprocess.run(command, capture_output=True, text=True)
+    res = subprocess.run(command, capture_output=True, text=True, timeout=wait_timeout)
     if res.returncode != 0:
         raise CommandExecuteError(f"Failed to execute: {res.stderr}")
 
@@ -103,6 +108,7 @@ def build_command(command, allowed_commands=None, aws_region=None):
 
         if any(atr in _allowed_commands[key_path] for atr in var_list.keys()):
             break
+
     return command
 
 
@@ -245,6 +251,8 @@ def execute(
     _allowed_commands = allowed_commands or parse_help()
 
     if token or ocm_client:
+        set_and_verify_aws_credentials()
+
         if ocm_client:
             ocm_env = ocm_client.api_client.configuration.host
             token = ocm_client.api_client.token
@@ -260,11 +268,19 @@ def execute(
                 allowed_commands=_allowed_commands,
                 aws_region=aws_region,
             )
+
     else:
         if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
             raise NotLoggedInError(
                 "Not logged in to OCM, either pass 'token' or log in before running."
             )
+
         return build_execute_command(
             command=command, allowed_commands=_allowed_commands, aws_region=aws_region
         )
+
+
+if __name__ == "__main__":
+    """
+    for local debugging.
+    """
