@@ -177,13 +177,13 @@ def parse_help(rosa_cmd="rosa"):
         if _commands:
             # If top command has sub command
             for command in _commands:
-                flag_search_path = [top_command, command]
+                flag_search_path.append(command)
                 commands_dict[flag_search_path] = {}
                 _commands = get_available_commands(command=["rosa"] + flag_search_path)
                 if _commands:
                     # If sub command has sub command
                     for _command in _commands:
-                        flag_search_path = [top_command, command, _command]
+                        flag_search_path.append(_command)
                         commands_dict[flag_search_path] = {}
                         _fill_commands_dict_with_support_flags(
                             flag_key_path=flag_search_path
@@ -197,7 +197,7 @@ def parse_help(rosa_cmd="rosa"):
             # If top command doesn't have sub command
             _fill_commands_dict_with_support_flags(flag_key_path=flag_search_path)
 
-    return dict(commands_dict)
+    return commands_dict
 
 
 def parse_json_response(response):
