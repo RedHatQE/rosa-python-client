@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "rosa-python-client"
-version = "1.0.14"
+version = "1.0.15"
 description = "Wrapper for rosa cli"
 authors = ["Meni Yakove <myakove@gmail.com>"]
 readme = "README.md"
@@ -8,9 +8,10 @@ packages = [{include = "rosa"}]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-python-simple-logger = "*"
 redhat-qe-cloud-tools = "^1.0.6"
-python-benedict = "*"
+python-benedict = "^0.31.0"
+python-simple-logger = "^1.0.5"
+
 
 [tool.poetry.group.dev.dependencies]
 ipdb = "^0.13.13"
