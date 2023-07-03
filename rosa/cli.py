@@ -187,7 +187,39 @@ def parse_help(rosa_cmd="rosa"):
                     )
         else:
             # If top command doesn't have sub command
-            _fill_commands_dict_with_support_flags(flag_key_path=top_command)
+            _fill_commands_dict_with_support_flags(flag_key_path=[top_command])
+
+    return commands_dict
+
+
+@functools.cache
+def parse_help_1(rosa_cmd="rosa"):
+    commands_dict = benedict()
+
+    def _fill_commands_dict_with_support_flags(flag_key_path):
+        support_commands = {
+            "json_output": "-o, --output",
+            "auto_answer_yes": "-y, --yes",
+            "auto_mode": "-m, --mode",
+            "region": "--region",
+        }
+        for cli_flag, flag_value in support_commands.items():
+            commands_dict[flag_key_path][cli_flag] = check_flag_in_flags(
+                command_list=["rosa"] + flag_key_path,
+                flag_str=flag_value,
+            )
+
+    def _build_command_tree(commands_search_path):
+        sub_commands = get_available_commands(command=["rosa"] + commands_search_path)
+        if not sub_commands:
+            return _fill_commands_dict_with_support_flags(
+                flag_key_path=commands_search_path
+            )
+        for sub_command in sub_commands:
+            commands_dict[commands_search_path, sub_command] = {}
+            _build_command_tree(commands_search_path + [sub_command])
+
+    _build_command_tree([])
 
     return commands_dict
 
