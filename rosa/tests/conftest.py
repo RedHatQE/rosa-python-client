@@ -1,17 +1,19 @@
 from rosa.cli import parse_help
+from rosa.tests.const import AWS_REGION_STR
 
 
 def path_from_dict(_dict, _path=""):
-    aws_region_str = "aws_region"
     end_values = ["json_output", "auto_answer_yes", "auto_mode", "region"]
 
     for key, val in _dict.items():
-        if all([True if _key in end_values else False for _key in val.keys()]):
+        # If dict == end_values we know that this is the final dict
+        if all([_key in end_values for _key in val.keys()]):
             yield {
                 "command": f"{_path}{key}",
-                aws_region_str: aws_region_str if val["region"] else None,
+                AWS_REGION_STR: AWS_REGION_STR if val["region"] else None,
             }
         else:
+            # If the command has sub command we need to get the syb command values
             yield from path_from_dict(_dict=val, _path=f"{key} ")
 
 

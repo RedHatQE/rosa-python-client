@@ -91,20 +91,16 @@ def build_command(command, allowed_commands=None, aws_region=None):
     commands_dict = benedict(_allowed_commands, keypath_separator=" ")
     _output = commands_dict[commands_to_process]
 
-    add_json_output = _output.get("json_output") is True
-    if add_json_output:
+    if _output.get("json_output") is True:
         command.append("-ojson")
 
-    add_auto_answer_yes = _output.get("auto_answer_yes") is True
-    if add_auto_answer_yes:
+    if _output.get("auto_answer_yes") is True:
         command.append("--yes")
 
-    add_auto_update = _output.get("auto_mode") is True
-    if add_auto_update:
+    if _output.get("auto_mode") is True:
         command.append("--mode=auto")
 
-    add_aws_region_flag = _output.get("region") is True
-    if add_aws_region_flag and aws_region:
+    if _output.get("region") is True and aws_region:
         command.append(f"--region={aws_region}")
 
     return command

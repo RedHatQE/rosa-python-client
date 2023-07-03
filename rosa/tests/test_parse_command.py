@@ -3,6 +3,7 @@ from benedict import benedict
 from simple_logger.logger import get_logger
 
 from rosa.cli import build_command, parse_help
+from rosa.tests.const import AWS_REGION_STR
 
 
 LOGGER = get_logger(__name__)
@@ -16,7 +17,7 @@ def rosa_commands(request):
 def test_json(rosa_commands):
     allowed_commands = parse_help()
     command = rosa_commands["command"]
-    aws_region = rosa_commands["aws_region"]
+    aws_region = rosa_commands[AWS_REGION_STR]
     rosa_command = build_command(
         command=command, allowed_commands=allowed_commands, aws_region=aws_region
     )
