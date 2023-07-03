@@ -6,7 +6,7 @@ import re
 import shlex
 import subprocess
 
-import benedict
+from benedict import benedict
 from clouds.aws.aws_utils import set_and_verify_aws_credentials
 from simple_logger.logger import get_logger
 
@@ -83,34 +83,25 @@ def check_flag_in_flags(command_list, flag_str):
 
 
 def build_command(command, allowed_commands=None, aws_region=None):
-    _allowed_commands = benedict.benedict(allowed_commands or parse_help())
+    _allowed_commands = allowed_commands or parse_help()
     _user_command = shlex.split(command)
     command = ["rosa"]
     command.extend(_user_command)
-    support_commands = {
-        "json_output": "-ojson",
-        "auto_answer_yes": "--yes",
-        "auto_mode": "--mode=auto",
-    }
+    commands_to_process = [_cmd for _cmd in _user_command if not _cmd.startswith("--")]
+    commands_dict = benedict(_allowed_commands, keypath_separator=" ")
+    _output = commands_dict[commands_to_process]
 
-    flag_search_path = []
-    for cmd in _user_command:
-        if cmd.startswith("--"):
-            continue
-        flag_search_path.append(cmd)
+    if _output.get("json_output") is True:
+        command.append("-ojson")
 
-        if any(
-            flag in _allowed_commands[flag_search_path]
-            for flag in support_commands.keys()
-        ):
-            for cli_flag, flag_value in support_commands.items():
-                if _allowed_commands[flag_search_path].get(cli_flag, {}):
-                    command.append(flag_value)
+    if _output.get("auto_answer_yes") is True:
+        command.append("--yes")
 
-            if _allowed_commands[flag_search_path].get("region", {}) and aws_region:
-                command.append(f"--region={aws_region}")
+    if _output.get("auto_mode") is True:
+        command.append("--mode=auto")
 
-            break
+    if _output.get("region") is True and aws_region:
+        command.append(f"--region={aws_region}")
 
     return command
 
