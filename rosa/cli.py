@@ -141,7 +141,7 @@ def get_available_flags(command):
 
 @functools.cache
 def parse_help(rosa_cmd="rosa"):
-    commands_dict = benedict.benedict()
+    commands_dict = benedict()
 
     def _fill_commands_dict_with_support_flags(flag_key_path):
         support_commands = {
@@ -162,31 +162,32 @@ def parse_help(rosa_cmd="rosa"):
         commands_dict.setdefault(command, {})
 
     for top_command in commands_dict.keys():
-        flag_search_path = [top_command]
-        _commands = get_available_commands(command=["rosa"] + flag_search_path)
+        sub_commands = get_available_commands(command=["rosa", top_command])
 
-        if _commands:
+        if sub_commands:
             # If top command has sub command
-            for command in _commands:
-                flag_search_path = [top_command, command]
-                commands_dict[flag_search_path] = {}
-                _commands = get_available_commands(command=["rosa"] + flag_search_path)
-                if _commands:
+            for command in sub_commands:
+                sub_search_path = [top_command, command]
+                commands_dict[sub_search_path] = {}
+                complementary_sub_commands = get_available_commands(
+                    command=["rosa"] + sub_search_path
+                )
+                if complementary_sub_commands:
                     # If sub command has sub command
-                    for _command in _commands:
-                        flag_search_path = [top_command, command, _command]
-                        commands_dict[flag_search_path] = {}
+                    for _command in complementary_sub_commands:
+                        complementary_search_path = [top_command, command, _command]
+                        commands_dict[complementary_search_path] = {}
                         _fill_commands_dict_with_support_flags(
-                            flag_key_path=flag_search_path
+                            flag_key_path=complementary_search_path
                         )
                 else:
                     # If sub command doesn't have sub command
                     _fill_commands_dict_with_support_flags(
-                        flag_key_path=flag_search_path
+                        flag_key_path=sub_search_path
                     )
         else:
             # If top command doesn't have sub command
-            _fill_commands_dict_with_support_flags(flag_key_path=flag_search_path)
+            _fill_commands_dict_with_support_flags(flag_key_path=top_command)
 
     return commands_dict
 
