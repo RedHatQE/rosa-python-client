@@ -11,7 +11,6 @@ python = "^3.8"
 redhat-qe-cloud-tools = "^1.0.6"
 python-benedict = "^0.31.0"
 python-simple-logger = "^1.0.5"
-tox = "^4.6.3"
 
 
 [tool.poetry.group.dev.dependencies]
