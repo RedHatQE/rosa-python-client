@@ -140,60 +140,7 @@ def get_available_flags(command):
 
 
 @functools.cache
-def parse_help(rosa_cmd="rosa"):
-    commands_dict = benedict()
-
-    def _fill_commands_dict_with_support_flags(flag_key_path):
-        support_commands = {
-            "json_output": "-o, --output",
-            "auto_answer_yes": "-y, --yes",
-            "auto_mode": "-m, --mode",
-            "region": "--region",
-        }
-        for cli_flag, flag_value in support_commands.items():
-            commands_dict[flag_key_path][cli_flag] = check_flag_in_flags(
-                command_list=["rosa"] + flag_key_path,
-                flag_str=flag_value,
-            )
-
-    _commands = get_available_commands(command=[rosa_cmd])
-
-    for command in _commands:
-        commands_dict.setdefault(command, {})
-
-    for top_command in commands_dict.keys():
-        sub_commands = get_available_commands(command=["rosa", top_command])
-
-        if sub_commands:
-            # If top command has sub command
-            for command in sub_commands:
-                sub_search_path = [top_command, command]
-                commands_dict[sub_search_path] = {}
-                complementary_sub_commands = get_available_commands(
-                    command=["rosa"] + sub_search_path
-                )
-                if complementary_sub_commands:
-                    # If sub command has sub command
-                    for _command in complementary_sub_commands:
-                        complementary_search_path = [top_command, command, _command]
-                        commands_dict[complementary_search_path] = {}
-                        _fill_commands_dict_with_support_flags(
-                            flag_key_path=complementary_search_path
-                        )
-                else:
-                    # If sub command doesn't have sub command
-                    _fill_commands_dict_with_support_flags(
-                        flag_key_path=sub_search_path
-                    )
-        else:
-            # If top command doesn't have sub command
-            _fill_commands_dict_with_support_flags(flag_key_path=[top_command])
-
-    return commands_dict
-
-
-@functools.cache
-def parse_help_1(rosa_cmd="rosa"):
+def parse_help():
     commands_dict = benedict()
 
     def _fill_commands_dict_with_support_flags(flag_key_path):
