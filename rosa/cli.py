@@ -83,11 +83,14 @@ def check_flag_in_flags(command_list, flag_str):
 
 
 def build_command(command, allowed_commands=None, aws_region=None):
+    LOGGER.info(f"Parsing user command: {command}")
     _allowed_commands = allowed_commands or parse_help()
     _user_command = shlex.split(command)
     command = ["rosa"]
     command.extend(_user_command)
-    commands_to_process = [_cmd for _cmd in _user_command if not _cmd.startswith("--")]
+    commands_to_process = [
+        _cmd for _cmd in _user_command if not _cmd.startswith(("--", "-"))
+    ]
     commands_dict = benedict(_allowed_commands, keypath_separator=" ")
     _output = commands_dict[commands_to_process]
 
