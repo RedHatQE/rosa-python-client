@@ -340,9 +340,3 @@ if __name__ == "__main__":
     """
     for local debugging.
     """
-    print(
-        build_command(
-            "delete operator-roles --cluster=24u8uorbgkfrearql3dn42ne49n1o3ju",
-            aws_region="east",
-        )
-    )
