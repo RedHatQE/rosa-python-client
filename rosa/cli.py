@@ -27,6 +27,15 @@ class NotLoggedInError(Exception):
     pass
 
 
+def hash_log_secrets(log, secrets):
+    for secret in secrets:
+        log = re.sub(
+            rf"(--{secret}=.* |--{secret}=.*)", f"--{secret}=hashed-{secret} ", log
+        )
+
+    return log
+
+
 @contextlib.contextmanager
 def rosa_login_logout(env, token, aws_region, allowed_commands=None):
     _allowed_commands = allowed_commands or parse_help()
@@ -62,14 +71,12 @@ def is_logged_in(aws_region=None, allowed_commands=None):
 
 
 def execute_command(command, wait_timeout=TIMEOUT_5MIN):
-    joined_command = " ".join(command)
-    LOGGER.info(
-        f"Executing command: {re.sub(r'(--token=.* |--token=.*)', '--token=hashed-token', joined_command)}, "
-        f"waiting for {wait_timeout} seconds."
-    )
+    log = f"Executing command: {' '.join(command)}, waiting for {wait_timeout} seconds."
+    hashed_log = hash_log_secrets(log=log, secrets=["token"])
+    LOGGER.info(hashed_log)
     res = subprocess.run(command, capture_output=True, text=True, timeout=wait_timeout)
     if res.returncode != 0:
-        raise CommandExecuteError(f"Failed to execute: {res.stderr}")
+        raise CommandExecuteError(f"Failed to execute '{hashed_log}': {res.stderr}")
 
     return parse_json_response(response=res)
 
@@ -83,26 +90,34 @@ def check_flag_in_flags(command_list, flag_str):
 
 
 def build_command(command, allowed_commands=None, aws_region=None):
+    LOGGER.info(
+        hash_log_secrets(log=f"Parsing user command: {command}", secrets=["token"])
+    )
     _allowed_commands = allowed_commands or parse_help()
     _user_command = shlex.split(command)
     command = ["rosa"]
     command.extend(_user_command)
-    commands_to_process = [_cmd for _cmd in _user_command if not _cmd.startswith("--")]
+    commands_to_process = [
+        _cmd for _cmd in _user_command if not _cmd.startswith(("--", "-"))
+    ]
     commands_dict = benedict(_allowed_commands, keypath_separator=" ")
-    _output = commands_dict[commands_to_process]
+    commands_to_process_len = len(commands_to_process)
+    extra_commands = set()
+    for idx in range(commands_to_process_len):
+        _output = commands_dict[commands_to_process[: commands_to_process_len - idx]]
+        if _output.get("json_output") is True:
+            extra_commands.add("-ojson")
 
-    if _output.get("json_output") is True:
-        command.append("-ojson")
+        if _output.get("auto_answer_yes") is True:
+            extra_commands.add("--yes")
 
-    if _output.get("auto_answer_yes") is True:
-        command.append("--yes")
+        if _output.get("auto_mode") is True:
+            extra_commands.add("--mode=auto")
 
-    if _output.get("auto_mode") is True:
-        command.append("--mode=auto")
+        if _output.get("region") is True and aws_region:
+            extra_commands.add(f"--region={aws_region}")
 
-    if _output.get("region") is True and aws_region:
-        command.append(f"--region={aws_region}")
-
+    command.extend(extra_commands)
     return command
 
 
@@ -184,15 +199,56 @@ def parse_help_1(rosa_cmd="rosa"):
         commands_dict.setdefault(command, {})
 
     for top_command in commands_dict.keys():
+        # Always get top commands options
+        commands_dict[top_command]["json_output"] = check_flag_in_flags(
+            command_list=[rosa_cmd, top_command],
+            flag_str=output_flag_str,
+        )
+        commands_dict[top_command]["auto_answer_yes"] = check_flag_in_flags(
+            command_list=[rosa_cmd, top_command],
+            flag_str=auto_answer_yes_str,
+        )
+        commands_dict[top_command]["auto_mode"] = check_flag_in_flags(
+            command_list=[rosa_cmd, top_command],
+            flag_str=auto_mode_str,
+        )
+        commands_dict[top_command]["region"] = check_flag_in_flags(
+            command_list=[rosa_cmd, top_command],
+            flag_str=region_str,
+        )
+
         _commands = get_available_commands(command=[rosa_cmd, top_command])
 
         if _commands:
-            # If top command has sub command
             for command in _commands:
                 commands_dict[top_command][command] = {}
+                # Always get sub commands options
+                commands_dict[top_command][command][
+                    "json_output"
+                ] = check_flag_in_flags(
+                    command_list=[rosa_cmd, top_command, command],
+                    flag_str=output_flag_str,
+                )
+                commands_dict[top_command][command][
+                    "auto_answer_yes"
+                ] = check_flag_in_flags(
+                    command_list=[rosa_cmd, top_command, command],
+                    flag_str=auto_answer_yes_str,
+                )
+                commands_dict[top_command][command]["auto_mode"] = check_flag_in_flags(
+                    command_list=[rosa_cmd, top_command, command],
+                    flag_str=auto_mode_str,
+                )
+                commands_dict[top_command][command]["region"] = check_flag_in_flags(
+                    command_list=[rosa_cmd, top_command, command],
+                    flag_str=region_str,
+                )
+
                 _commands = get_available_commands(
                     command=[rosa_cmd, top_command, command]
                 )
+
+                # If top command has sub command
                 if _commands:
                     # If sub command has sub command
                     for _command in _commands:
@@ -221,49 +277,6 @@ def parse_help_1(rosa_cmd="rosa"):
                             command_list=[rosa_cmd, top_command, _command],
                             flag_str=region_str,
                         )
-                else:
-                    # If sub command doesn't have sub command
-                    commands_dict[top_command][command][
-                        "json_output"
-                    ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, command],
-                        flag_str=output_flag_str,
-                    )
-                    commands_dict[top_command][command][
-                        "auto_answer_yes"
-                    ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, command],
-                        flag_str=auto_answer_yes_str,
-                    )
-                    commands_dict[top_command][command][
-                        "auto_mode"
-                    ] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, command],
-                        flag_str=auto_mode_str,
-                    )
-                    commands_dict[top_command][command]["region"] = check_flag_in_flags(
-                        command_list=[rosa_cmd, top_command, command],
-                        flag_str=region_str,
-                    )
-
-        else:
-            # If top command doesn't have sub command
-            commands_dict[top_command]["json_output"] = check_flag_in_flags(
-                command_list=[rosa_cmd, top_command],
-                flag_str=output_flag_str,
-            )
-            commands_dict[top_command]["auto_answer_yes"] = check_flag_in_flags(
-                command_list=[rosa_cmd, top_command],
-                flag_str=auto_answer_yes_str,
-            )
-            commands_dict[top_command]["auto_mode"] = check_flag_in_flags(
-                command_list=[rosa_cmd, top_command],
-                flag_str=auto_mode_str,
-            )
-            commands_dict[top_command]["region"] = check_flag_in_flags(
-                command_list=[rosa_cmd, top_command],
-                flag_str=region_str,
-            )
 
     return commands_dict
 
@@ -326,7 +339,7 @@ def execute(
     _allowed_commands = allowed_commands or parse_help()
 
     if token or ocm_client:
-        set_and_verify_aws_credentials()
+        set_and_verify_aws_credentials(region_name=aws_region)
 
         if ocm_client:
             ocm_env = ocm_client.api_client.configuration.host
