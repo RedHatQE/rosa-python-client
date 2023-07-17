@@ -156,9 +156,7 @@ def get_available_flags(command):
 
 @functools.cache
 def parse_help():
-    commands_dict = benedict()
-
-    def _fill_commands_dict_with_support_flags(flag_key_path):
+    def _fill_commands_dict_with_support_flags(commands_dict, flag_key_path):
         support_commands = {
             "json_output": "-o, --output",
             "auto_answer_yes": "-y, --yes",
@@ -170,20 +168,23 @@ def parse_help():
                 command_list=["rosa"] + flag_key_path,
                 flag_str=flag_value,
             )
+        return commands_dict
 
-    def _build_command_tree(commands_search_path):
+    def _build_command_tree(commands_dict, commands_search_path=None):
+        if not commands_search_path:
+            commands_search_path = []
         sub_commands = get_available_commands(command=["rosa"] + commands_search_path)
         if not sub_commands:
             return _fill_commands_dict_with_support_flags(
-                flag_key_path=commands_search_path
+                commands_dict=commands_dict, flag_key_path=commands_search_path
             )
         for sub_command in sub_commands:
             commands_dict[commands_search_path, sub_command] = {}
-            _build_command_tree(commands_search_path + [sub_command])
+            _build_command_tree(commands_dict, commands_search_path + [sub_command])
 
-    _build_command_tree([])
+        return commands_dict
 
-    return commands_dict
+    return _build_command_tree(commands_dict=benedict())
 
 
 @functools.cache
