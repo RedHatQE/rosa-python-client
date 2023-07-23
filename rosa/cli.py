@@ -321,12 +321,14 @@ def execute(
             allowed_commands=_allowed_commands,
         )
 
-        with change_home_environment():
-            return build_execute_command(
-                command=command,
-                allowed_commands=_allowed_commands,
-                aws_region=aws_region,
-            )
+        # If running on openshift-ci we need to change $HOME to /tmp
+        if os.environ.get("OPENSHIFT_CI") == "true":
+            with change_home_environment():
+                return build_execute_command(
+                    command=command,
+                    allowed_commands=_allowed_commands,
+                    aws_region=aws_region,
+                )
 
     else:
         if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
