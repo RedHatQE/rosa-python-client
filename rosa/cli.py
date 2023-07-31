@@ -181,22 +181,22 @@ def parse_help():
         return commands_dict
 
     def _build_command_tree(commands_dict, commands_search_path=None):
-        _commands_dict = commands_dict
-        _commands_search_path = commands_search_path or []
+        if not commands_search_path:
+            commands_search_path = []
 
-        sub_commands = get_available_commands(command=["rosa"] + _commands_search_path)
+        sub_commands = get_available_commands(command=["rosa"] + commands_search_path)
         if not sub_commands:
             return _fill_commands_dict_with_support_flags(
-                commands_dict=_commands_dict, flag_key_path=_commands_search_path
+                commands_dict=commands_dict, flag_key_path=commands_search_path
             )
         for sub_command in sub_commands:
-            _commands_dict[_commands_search_path, sub_command] = {}
+            commands_dict[commands_search_path, sub_command] = {}
             _build_command_tree(
-                commands_dict=_commands_dict,
-                commands_search_path=_commands_search_path + [sub_command],
+                commands_dict=commands_dict,
+                commands_search_path=commands_search_path + [sub_command],
             )
 
-        return _commands_dict
+        return commands_dict
 
     return _build_command_tree(commands_dict=benedict())
 
