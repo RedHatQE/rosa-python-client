@@ -174,21 +174,24 @@ def parse_help():
             "region": "--region",
         }
         for cli_flag, flag_value in support_commands.items():
-            commands_dict[flag_key_path][cli_flag] = check_flag_in_flags(
+            flag_value_result = check_flag_in_flags(
                 command_list=["rosa"] + flag_key_path,
                 flag_str=flag_value,
             )
+            if flag_key_path:
+                commands_dict[flag_key_path][cli_flag] = flag_value_result
+            else:
+                commands_dict[cli_flag] = flag_value_result
         return commands_dict
 
     def _build_command_tree(commands_dict, commands_search_path=None):
         if not commands_search_path:
             commands_search_path = []
 
+        commands_dict = _fill_commands_dict_with_support_flags(
+            commands_dict=commands_dict, flag_key_path=commands_search_path
+        )
         sub_commands = get_available_commands(command=["rosa"] + commands_search_path)
-        if not sub_commands:
-            return _fill_commands_dict_with_support_flags(
-                commands_dict=commands_dict, flag_key_path=commands_search_path
-            )
         for sub_command in sub_commands:
             commands_dict[commands_search_path, sub_command] = {}
             _build_command_tree(
