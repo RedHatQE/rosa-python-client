@@ -38,8 +38,12 @@ def hash_log_secrets(log, secrets):
 
 def rosa_login(env, token, aws_region, allowed_commands=None):
     _allowed_commands = allowed_commands or parse_help()
+    if is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
+        LOGGER.info(f"Already logged in to {env} [region: {aws_region}].")
+        return
+
     build_execute_command(
-        command=f"login {f'--env={env}' if env else ''} --token={token}",
+        command=f"login --env={env} --token={token}",
         allowed_commands=_allowed_commands,
         aws_region=aws_region,
     )
@@ -105,7 +109,12 @@ def build_command(command, allowed_commands=None, aws_region=None):
     commands_to_process_len = len(commands_to_process)
     extra_commands = set()
     for idx in range(commands_to_process_len):
-        _output = commands_dict[commands_to_process[: commands_to_process_len - idx]]
+        try:
+            _output = commands_dict[
+                commands_to_process[: commands_to_process_len - idx]
+            ]
+        except KeyError:
+            continue
         if _output.get("json_output") is True:
             extra_commands.add("-ojson")
 
@@ -250,27 +259,29 @@ def execute(
     _allowed_commands = allowed_commands or parse_help()
 
     if token or ocm_client:
-        set_and_verify_aws_credentials(region_name=aws_region)
-
         if ocm_client:
             ocm_env = ocm_client.api_client.configuration.host
             token = ocm_client.api_client.token
 
-        rosa_login(
-            env=ocm_env,
-            token=token,
-            aws_region=aws_region,
-            allowed_commands=_allowed_commands,
-        )
-
         # If running on openshift-ci we need to change $HOME to /tmp
         if os.environ.get("OPENSHIFT_CI") == "true":
+            LOGGER.info("Running in openshift ci")
             with change_home_environment():
-                return build_execute_command(
-                    command=command,
+                return _prepare_and_execute_command(
                     allowed_commands=_allowed_commands,
                     aws_region=aws_region,
+                    command=command,
+                    ocm_env=ocm_env,
+                    token=token,
                 )
+        else:
+            return _prepare_and_execute_command(
+                allowed_commands=_allowed_commands,
+                aws_region=aws_region,
+                command=command,
+                ocm_env=ocm_env,
+                token=token,
+            )
 
     else:
         if not is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region):
@@ -281,6 +292,21 @@ def execute(
         return build_execute_command(
             command=command, allowed_commands=_allowed_commands, aws_region=aws_region
         )
+
+
+def _prepare_and_execute_command(allowed_commands, aws_region, command, ocm_env, token):
+    set_and_verify_aws_credentials(region_name=aws_region)
+    rosa_login(
+        env=ocm_env,
+        token=token,
+        aws_region=aws_region,
+        allowed_commands=allowed_commands,
+    )
+    return build_execute_command(
+        command=command,
+        allowed_commands=allowed_commands,
+        aws_region=aws_region,
+    )
 
 
 if __name__ == "__main__":
