@@ -36,9 +36,9 @@
     "web": false
   },
   "plugins": {
-      "@release-it/bumper": {
-        "in": "VERSION",
-        "out": "VERSION"
+    "@release-it/bumper": {
+      "in": "VERSION",
+      "out": "VERSION"
     }
   }
 }
