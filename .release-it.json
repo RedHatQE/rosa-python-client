@@ -1,7 +1,7 @@
 {
   "npm": {
-  "publish": false
-},
+    "publish": false
+  },
   "git": {
     "requireCleanWorkingDir": true,
     "requireBranch": false,
