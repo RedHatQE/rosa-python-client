@@ -298,11 +298,11 @@ def _prepare_and_execute_command(allowed_commands, aws_region, command, ocm_env,
 
 
 def update_command(command):
-    command.append("--help")
-
     # Addon ID is needed until https://github.com/openshift/rosa/issues/1835 is resolved
     if "rosa edit addon" in " ".join(command):
         command.append("addon_name")
+
+    command.append("--help")
 
     return command
 
