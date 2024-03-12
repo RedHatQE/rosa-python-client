@@ -149,6 +149,11 @@ def get_available_commands(command):
 
 def get_available_flags(command):
     command.append("--help")
+
+    # Addon ID is needed until https://github.com/openshift/rosa/issues/1835 is resolved
+    if "rosa edit addon" in " ".join(command):
+        command.append("addon_name")
+
     available_flags = subprocess.run(command, capture_output=True, check=True, text=True)
     available_flags = re.findall(r"Flags:(.*)Global Flags:(.*)", available_flags.stdout, re.DOTALL)
     if available_flags:
