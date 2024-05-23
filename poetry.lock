@@ -206,6 +206,27 @@ tests = ["pytest (>=3.2.1,!=3.3.0)"]
 typecheck = ["mypy"]
 
 [[package]]
+name = "beautifulsoup4"
+version = "4.12.3"
+description = "Screen-scraping library"
+optional = false
+python-versions = ">=3.6.0"
+files = [
+    {file = "beautifulsoup4-4.12.3-py3-none-any.whl", hash = "sha256:b80878c9f40111313e55da8ba20bdba06d8fa3969fc68304167741bbf9e082ed"},
+    {file = "beautifulsoup4-4.12.3.tar.gz", hash = "sha256:74e3d1928edc070d21748185c46e3fb33490f22f52a3addee9aee0f4f7781051"},
+]
+
+[package.dependencies]
+soupsieve = ">1.2"
+
+[package.extras]
+cchardet = ["cchardet"]
+chardet = ["chardet"]
+charset-normalizer = ["charset-normalizer"]
+html5lib = ["html5lib"]
+lxml = ["lxml"]
+
+[[package]]
 name = "boto3"
 version = "1.34.29"
 description = "The AWS SDK for Python"
@@ -1146,12 +1167,12 @@ urllib3 = ">=1.25.3"
 
 [[package]]
 name = "openshift-cluster-management-python-wrapper"
-version = "1.0.113"
+version = "1.0.114"
 description = "Wrapper around https://github.com/openshift/openshift-cluster-management-python-client"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "openshift_cluster_management_python_wrapper-1.0.113.tar.gz", hash = "sha256:bb0d5f891921ce32c87a2aea6c61c1190e618b4c2120d74d9ab165c832b52e1a"},
+    {file = "openshift_cluster_management_python_wrapper-1.0.114.tar.gz", hash = "sha256:b0a6ffd452e7adeab536df981c3a72d341fb8eb8c4f2202340931eea1ed1b3a9"},
 ]
 
 [package.dependencies]
@@ -1170,21 +1191,25 @@ timeout-sampler = ">=0.0.2"
 
 [[package]]
 name = "openshift-python-utilities"
-version = "5.0.22"
+version = "5.0.44"
 description = "A utilities repository for https://github.com/RedHatQE/openshift-python-wrapper"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "openshift_python_utilities-5.0.22.tar.gz", hash = "sha256:c527fdb3ebdbebee538698c92c537c3ad5164ac615c711c56a4371f10c86a149"},
+    {file = "openshift_python_utilities-5.0.44.tar.gz", hash = "sha256:d97b8904f11847fc68d9f3582e0e959288ff34b1085b38ad6ea8c176eb54e47b"},
 ]
 
 [package.dependencies]
+beautifulsoup4 = ">=4.12.3,<5.0.0"
 colorlog = ">=6.7.0,<7.0.0"
-openshift-python-wrapper = ">=10.0.4,<11.0.0"
-openshift-python-wrapper-data-collector = ">=1.0.4,<2.0.0"
-python-simple-logger = ">=1.0.5,<2.0.0"
+openshift-python-wrapper = ">=10.0.4"
+openshift-python-wrapper-data-collector = ">=1.0.4"
+pyhelper-utils = ">=0.0.20,<0.0.21"
+python-simple-logger = ">=1.0.5"
 pyyaml = ">=6.0.1,<7.0.0"
-timeout-sampler = ">=0.0.1"
+requests = ">=2.31.0,<3.0.0"
+semver = ">=3.0.2,<4.0.0"
+timeout-sampler = ">=0.0.17"
 
 [[package]]
 name = "openshift-python-wrapper"
@@ -1466,12 +1491,12 @@ windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
 name = "pyhelper-utils"
-version = "0.0.19"
+version = "0.0.20"
 description = "Collective utility functions for python projects"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "pyhelper_utils-0.0.19.tar.gz", hash = "sha256:2e38e32555118a68823eafcb4201694605d42d11b004a99b30dd5963096fd40a"},
+    {file = "pyhelper_utils-0.0.20.tar.gz", hash = "sha256:70d372487f7c2e14e8a6b6866b566f47100b4287ad9c7e287eaa6091ff87a219"},
 ]
 
 [package.dependencies]
@@ -1732,12 +1757,12 @@ files = [
 
 [[package]]
 name = "redhat-qe-cloud-tools"
-version = "1.0.76"
+version = "1.0.77"
 description = "Python utilities to manage cloud services, such as AWS."
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "redhat_qe_cloud_tools-1.0.76.tar.gz", hash = "sha256:7ca1593125bf06f0e8db235ad6c030cebfd229c3d548d2eb36be2ff1e4dd5c17"},
+    {file = "redhat_qe_cloud_tools-1.0.77.tar.gz", hash = "sha256:fe45fd871fdbbf05920c1e0157c62695dee307feba5e1cc147b8f897b63c7558"},
 ]
 
 [package.dependencies]
@@ -1752,8 +1777,8 @@ click = ">=8.1.4,<9.0.0"
 colorlog = ">=6.7.0,<7.0.0"
 configparser = ">=7.0.0,<8.0.0"
 google-cloud-compute = ">=1.14.1,<2.0.0"
-openshift-python-utilities = ">=5.0.0"
-pyhelper-utils = ">=0.0.19,<0.0.20"
+openshift-python-utilities = ">=5.0.44,<6.0.0"
+pyhelper-utils = ">=0.0.20,<0.0.21"
 python-simple-logger = ">=1.0.5"
 
 [[package]]
@@ -1846,6 +1871,17 @@ botocore = ">=1.33.2,<2.0a.0"
 crt = ["botocore[crt] (>=1.33.2,<2.0a.0)"]
 
 [[package]]
+name = "semver"
+version = "3.0.2"
+description = "Python helper for Semantic Versioning (https://semver.org)"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "semver-3.0.2-py3-none-any.whl", hash = "sha256:b1ea4686fe70b981f85359eda33199d60c53964284e0cfb4977d243e37cf4bf4"},
+    {file = "semver-3.0.2.tar.gz", hash = "sha256:6253adb39c70f6e51afed2fa7152bcd414c411286088fb4b9effb133885ab4cc"},
+]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1854,6 +1890,17 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+
+[[package]]
+name = "soupsieve"
+version = "2.5"
+description = "A modern CSS selector implementation for Beautiful Soup."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "soupsieve-2.5-py3-none-any.whl", hash = "sha256:eaa337ff55a1579b6549dc679565eac1e3d000563bcb1c8ab0d0fefbc0c2cdc7"},
+    {file = "soupsieve-2.5.tar.gz", hash = "sha256:5663d5a7b3bfaeee0bc4372e7fc48f9cff4940b3eec54a6451cc5299f1097690"},
 ]
 
 [[package]]
@@ -1888,16 +1935,16 @@ files = [
 
 [[package]]
 name = "timeout-sampler"
-version = "0.0.2"
+version = "0.0.31"
 description = "Timeout utility class to wait for any function output and interact with it in given time"
 optional = false
-python-versions = ">=3.8,<4.0"
+python-versions = "<4.0,>=3.8"
 files = [
-    {file = "timeout_sampler-0.0.2.tar.gz", hash = "sha256:addd9799f49dc1a9d7b053a63624d5f7438b09626e4a614295095431f7c66426"},
+    {file = "timeout_sampler-0.0.31.tar.gz", hash = "sha256:48a74c78473fea33538f9c4e9c5b3208554b71e5a7a6f7553a0eff74b269d162"},
 ]
 
 [package.dependencies]
-python-simple-logger = ">=1.0.8,<2.0.0"
+python-simple-logger = ">=1.0.8"
 
 [[package]]
 name = "tomli"
