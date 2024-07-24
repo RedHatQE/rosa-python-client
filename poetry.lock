@@ -1167,12 +1167,12 @@ urllib3 = ">=1.25.3"
 
 [[package]]
 name = "openshift-cluster-management-python-wrapper"
-version = "1.0.125"
+version = "1.0.126"
 description = "Wrapper around https://github.com/openshift/openshift-cluster-management-python-client"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "openshift_cluster_management_python_wrapper-1.0.125.tar.gz", hash = "sha256:19fead89dc62c74f29d36f44b92043f8cac0825cb7581e8f759c58ecf40eacdf"},
+    {file = "openshift_cluster_management_python_wrapper-1.0.126.tar.gz", hash = "sha256:640d7bee667b7971d3b5fe0d9d9a5d5101e7d4720e9cc0676d2c2a07036664a5"},
 ]
 
 [package.dependencies]
@@ -1644,12 +1644,12 @@ six = "*"
 
 [[package]]
 name = "python-simple-logger"
-version = "1.0.32"
+version = "1.0.33"
 description = "A simple logger for python"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "python_simple_logger-1.0.32.tar.gz", hash = "sha256:18c4dcb35c122681695bc2eb93828e0d447b1ec955d96020e3558a4e47ddb630"},
+    {file = "python_simple_logger-1.0.33.tar.gz", hash = "sha256:fa34931dd16a16972a327c140fc6f0f0549915e58952994a5a2cad73c4f70423"},
 ]
 
 [package.dependencies]
