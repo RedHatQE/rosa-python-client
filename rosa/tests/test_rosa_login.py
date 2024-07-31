@@ -42,7 +42,7 @@ def test_is_logged_in_success(mock_build_execute_command, allowed_commands):
             {"out": {}, "err": "some_error"},
             "Failed to execute 'rosa whoami': some_error",
         ),
-    ]
+    ],
 )
 def test_is_logged_in_error(mock_command, expected, mock_build_execute_command, allowed_commands):
     mock_build_execute_command.return_value = mock_command
