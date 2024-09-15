@@ -10,6 +10,7 @@ def get_rosa_versions(
 ) -> Dict[str, Dict[str, List[str]]]:
     """
     Get all rosa versions for specified channel group.
+
     Args:
         ocm_client: OCM client
         channel_group: Lists only versions from the specified channel group. Default is 'stable'
@@ -26,13 +27,13 @@ def get_rosa_versions(
                        '4.15': ['4.15.32', '4.15.31', '4.15.30', '4.15.29', '4.15.28', '4.15.27']}}
 
     """
-    rosa_base_available_versions_dict = {}
+    rosa_base_available_versions_dict: Dict = {}
     base_available_versions = rosa.cli.execute(
         command=(f"list versions --channel-group={channel_group} {'--hosted-cp' if hosted_cp else ''}"),
         aws_region=aws_region,
         ocm_client=ocm_client,
     )["out"]
-    _all_versions = [ver["raw_id"] for ver in base_available_versions]
+    _all_versions: List = [ver["raw_id"] for ver in base_available_versions]
     rosa_base_available_versions_dict[channel_group] = {}
     for _version in _all_versions:
         _version_key = re.findall(r"^\d+.\d+", _version)[0]
