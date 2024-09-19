@@ -1,10 +1,12 @@
 import re
 from typing import Dict, List
+from functools import lru_cache
 
 import rosa.cli
 from ocm_python_wrapper.ocm_client import OCMPythonClient
 
 
+@lru_cache
 def get_rosa_versions(
     ocm_client: OCMPythonClient, aws_region: str, channel_group: str = "stable", hosted_cp: bool = False
 ) -> Dict[str, Dict[str, List[str]]]:
