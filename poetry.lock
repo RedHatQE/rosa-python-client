@@ -1341,12 +1341,12 @@ urllib3 = ">=1.25.3"
 
 [[package]]
 name = "openshift-cluster-management-python-wrapper"
-version = "1.0.140"
+version = "1.0.144"
 description = "Wrapper around https://github.com/openshift/openshift-cluster-management-python-client"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "openshift_cluster_management_python_wrapper-1.0.140.tar.gz", hash = "sha256:619852226ae4f9b174758936887ef758bdf22aae982dfb639884ccba578323ce"},
+    {file = "openshift_cluster_management_python_wrapper-1.0.144.tar.gz", hash = "sha256:45307bf93eabaf858f6b73b3533d2bd837abc70b739995e4def69aa1cb91643e"},
 ]
 
 [package.dependencies]
@@ -1355,12 +1355,12 @@ importlib = ">=1.0.4,<2.0.0"
 openshift-cluster-management-python-client = ">=1.0.23"
 openshift-python-utilities = ">=5.0.0"
 openshift-python-wrapper = ">=10.0.0"
-python-benedict = ">=0.34.0"
+python-benedict = ">=0.33.0"
 python-simple-logger = ">=1.0.5"
 pyyaml = ">=6.0.1,<7.0.0"
 redhat-qe-cloud-tools = ">=1.0.10"
 requests = ">=2.31.0,<3.0.0"
-rosa-python-client = ">=1.0.28"
+rosa-python-client = ">=1.0.121,<2.0.0"
 timeout-sampler = ">=0.0.2"
 
 [[package]]
@@ -1821,13 +1821,13 @@ pyyaml = "*"
 
 [[package]]
 name = "python-benedict"
-version = "0.34.0"
+version = "0.33.2"
 description = "python-benedict is a dict subclass with keylist/keypath/keyattr support, normalized I/O operations (base64, csv, ini, json, pickle, plist, query-string, toml, xls, xml, yaml) and many utilities... for humans, obviously."
 optional = false
 python-versions = "*"
 files = [
-    {file = "python_benedict-0.34.0-py3-none-any.whl", hash = "sha256:acdcd993ecf56640a3bcd935086e1c19482271950933995511d1fd16a5954ece"},
-    {file = "python_benedict-0.34.0.tar.gz", hash = "sha256:d26a59abf418400dea39785d1336f5958fd7f00a732d5cc4e0e233a94e0b2c70"},
+    {file = "python-benedict-0.33.2.tar.gz", hash = "sha256:662de43bffb4e127da2056447f8ddd7f6f5c89b72dd66d289cf9abd1cc2720c8"},
+    {file = "python_benedict-0.33.2-py3-none-any.whl", hash = "sha256:50a69b601b34d4ad7b67fe94e3266ec05046bc547a4132fe43fd8fbd41aeefaa"},
 ]
 
 [package.dependencies]
@@ -2335,4 +2335,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "ade6c810560e6e1b2224e48fa464f6683c695e40c62f122e83d2a331d076c6f3"
+content-hash = "cb1b7316de5c35f6e271a8002445bd64904664e3f419eafcbd724e496e03f51a"
