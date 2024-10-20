@@ -19,7 +19,7 @@ exclude = [".git", ".venv", ".mypy_cache", ".tox", "__pycache__"]
 
 [tool.poetry]
 name = "rosa-python-client"
-version = "1.0.62"
+version = "1.0.121"
 description = "Wrapper for rosa cli"
 authors = ["Meni Yakove <myakove@gmail.com>"]
 readme = "README.md"
@@ -47,8 +47,8 @@ ipdb = "^0.13.13"
 ipython = "*"
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
-build-backend = "poetry_dynamic_versioning.backend"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.urls]
 Download = "https://pypi.org/project/rosa-python-client/"
@@ -56,10 +56,3 @@ Download = "https://pypi.org/project/rosa-python-client/"
 
 [tool.poetry.group.tests.dependencies]
 pytest = "^8.0.0"
-
-[tool.poetry-dynamic-versioning.substitution]
-files = ["VERSION"]
-
-[tool.poetry-dynamic-versioning]
-enable = true
-pattern = "((?P<epoch>\\d+)!)?(?P<base>\\d+(\\.\\d+)*)"
