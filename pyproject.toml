@@ -1,5 +1,5 @@
 [tool.coverage.run]
-omit = [ "rosa/tests/*" ]
+omit = ["rosa/tests/*"]
 
 [tool.coverage.report]
 fail_under = 60
@@ -14,35 +14,35 @@ line-length = 120
 fix = true
 output-format = "grouped"
 
-  [tool.ruff.format]
-  exclude = [ ".git", ".venv", ".mypy_cache", ".tox", "__pycache__" ]
+[tool.ruff.format]
+exclude = [".git", ".venv", ".mypy_cache", ".tox", "__pycache__"]
 
 [tool.poetry]
 name = "rosa-python-client"
-version = "1.0.121"
+version = "1.0.122"
 description = "Wrapper for rosa cli"
-authors = [ "Meni Yakove <myakove@gmail.com>" ]
+authors = ["Meni Yakove <myakove@gmail.com>"]
 readme = "README.md"
 license = "Apache-2.0"
 homepage = "https://github.com/RedHatQE/rosa-python-client"
 documentation = "https://github.com/RedHatQE/rosa-python-client/blob/main/README.md"
 classifiers = [
   "Programming Language :: Python :: 3",
-  "Operating System :: OS Independent"
+  "Operating System :: OS Independent",
 ]
 
-  [[tool.poetry.packages]]
-  include = "rosa"
+[[tool.poetry.packages]]
+include = "rosa"
 
-  [tool.poetry.dependencies]
-  python = "^3.8"
-  redhat-qe-cloud-tools = ">=1.0.19"
-  python-simple-logger = ">=1.0.5"
-  python-benedict = ">=0.34.0"
-  pytest-mock = "^3.14.0"
-  pytest-cov = "^5.0.0"
-  coverage = "^7.6.0"
-  openshift-cluster-management-python-wrapper = "^1.0.140"
+[tool.poetry.dependencies]
+python = "^3.8"
+redhat-qe-cloud-tools = ">=1.0.19"
+python-simple-logger = ">=1.0.5"
+python-benedict = ">=0.34.0"
+pytest-mock = "^3.14.0"
+pytest-cov = "^5.0.0"
+coverage = "^7.6.0"
+openshift-cluster-management-python-wrapper = "^1.0.140"
 
 [tool.poetry.group.dev.dependencies]
 ipdb = "^0.13.13"
@@ -51,13 +51,10 @@ ipython = "*"
 [tool.poetry.group.tests.dependencies]
 pytest = "^8.0.0"
 
-  [tool.poetry.urls]
-  Download = "https://pypi.org/project/rosa-python-client/"
-  "Bug Tracker" = "https://github.com/RedHatQE/rosa-python-client/issues"
+[tool.poetry.urls]
+Download = "https://pypi.org/project/rosa-python-client/"
+"Bug Tracker" = "https://github.com/RedHatQE/rosa-python-client/issues"
 
 [build-system]
-requires = [ "poetry-core>=1.0.0" ]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[project]
-version = "1.0.122"
