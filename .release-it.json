@@ -38,8 +38,8 @@
   },
   "plugins": {
     "@release-it/bumper": {
-      "in": "pyproject.toml",
-      "out": { "file": "pyproject.toml", "path": "tool.poetry" }
+      "in": "VERSION",
+      "out": "VERSION"
     }
   }
 }
