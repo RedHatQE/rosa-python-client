@@ -9,7 +9,6 @@
       "matchPackagePatterns": [
         "redhat-qe-cloud-tools",
         "python-simple-logger",
-        "python-benedict",
         "openshift-cluster-management-python-wrapper",
         "ipdb",
         "ipython",
