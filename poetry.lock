@@ -82,13 +82,13 @@ azure-core = ">=1.31.0"
 
 [[package]]
 name = "azure-mgmt-network"
-version = "27.0.0"
+version = "28.0.0"
 description = "Microsoft Azure Network Management Client Library for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "azure_mgmt_network-27.0.0-py3-none-any.whl", hash = "sha256:67295fda351fdae79d14591487009e911346adea9578bb1b04636a15e3472598"},
-    {file = "azure_mgmt_network-27.0.0.tar.gz", hash = "sha256:5c1c61d8bb13ad40f788a26fd7569c1d9d60eb2e4cb19c2a1b5d9c02ae862316"},
+    {file = "azure_mgmt_network-28.0.0-py3-none-any.whl", hash = "sha256:2ee23c1f2ba75752187bd7f4c3e94ad172282cbf8153694feadc7886ef88493c"},
+    {file = "azure_mgmt_network-28.0.0.tar.gz", hash = "sha256:40356d348ef4838324f19a41cd80340b4f8dd4ac2f0a18a4cbd5cc95ef2974f3"},
 ]
 
 [package.dependencies]
@@ -99,13 +99,13 @@ typing-extensions = ">=4.6.0"
 
 [[package]]
 name = "azure-mgmt-redhatopenshift"
-version = "1.5.0"
+version = "2.0.0"
 description = "Microsoft Azure Red Hat Openshift Management Client Library for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "azure-mgmt-redhatopenshift-1.5.0.tar.gz", hash = "sha256:51fb7429c39c88acc9fa273d9f89f19303520662996a6d7d8e1122a98f5f2527"},
-    {file = "azure_mgmt_redhatopenshift-1.5.0-py3-none-any.whl", hash = "sha256:45d8145ae11709cd80c01df879d29442cf08272c2b3ee557b4692dd2c1039b5d"},
+    {file = "azure_mgmt_redhatopenshift-2.0.0-py3-none-any.whl", hash = "sha256:c18c47253f18c7751a941ee939e645f9739786a0117e27fbe408012b980f7f44"},
+    {file = "azure_mgmt_redhatopenshift-2.0.0.tar.gz", hash = "sha256:9d304acbba7c9f42561269f707210aada9c7b5ea0990f2722df60599a08e3aae"},
 ]
 
 [package.dependencies]
@@ -1314,12 +1314,12 @@ urllib3 = ">=1.25.3"
 
 [[package]]
 name = "openshift-cluster-management-python-wrapper"
-version = "1.0.150"
+version = "2.0.0"
 description = "Wrapper around https://github.com/openshift/openshift-cluster-management-python-client"
 optional = false
-python-versions = "<4.0,>=3.8"
+python-versions = "<4.0,>=3.9"
 files = [
-    {file = "openshift_cluster_management_python_wrapper-1.0.150.tar.gz", hash = "sha256:ce00cecb1f19ac134aa4e0caf1213e30cf89c7039e54124225eff15818d68144"},
+    {file = "openshift_cluster_management_python_wrapper-2.0.0.tar.gz", hash = "sha256:1c0750bfecbf9dc3bf276f7d8b2e4cfaecd267f02373ccc65abbd01c06fbf9c2"},
 ]
 
 [package.dependencies]
@@ -1732,17 +1732,17 @@ dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments
 
 [[package]]
 name = "pytest-cov"
-version = "5.0.0"
+version = "6.0.0"
 description = "Pytest plugin for measuring coverage."
 optional = false
-python-versions = ">=3.8"
+python-versions = ">=3.9"
 files = [
-    {file = "pytest-cov-5.0.0.tar.gz", hash = "sha256:5837b58e9f6ebd335b0f8060eecce69b662415b16dc503883a02f45dfeb14857"},
-    {file = "pytest_cov-5.0.0-py3-none-any.whl", hash = "sha256:4f0764a1219df53214206bf1feea4633c3b558a2925c8b59f144f682861ce652"},
+    {file = "pytest-cov-6.0.0.tar.gz", hash = "sha256:fde0b595ca248bb8e2d76f020b465f3b107c9632e6a1d1705f17834c89dcadc0"},
+    {file = "pytest_cov-6.0.0-py3-none-any.whl", hash = "sha256:eee6f1b9e61008bd34975a4d5bab25801eb31898b032dd55addc93e96fcaaa35"},
 ]
 
 [package.dependencies]
-coverage = {version = ">=5.2.1", extras = ["toml"]}
+coverage = {version = ">=7.5", extras = ["toml"]}
 pytest = ">=4.6"
 
 [package.extras]
@@ -1969,19 +1969,19 @@ files = [
 
 [[package]]
 name = "redhat-qe-cloud-tools"
-version = "1.0.96"
+version = "2.0.0"
 description = "Python utilities to manage cloud services, such as AWS."
 optional = false
-python-versions = "<4.0,>=3.8"
+python-versions = "<4.0,>=3.9"
 files = [
-    {file = "redhat_qe_cloud_tools-1.0.96.tar.gz", hash = "sha256:bf17be5899d4295d587f11e8fdbd6e4d5f5ef3da3908daa4860efa5d5edde63a"},
+    {file = "redhat_qe_cloud_tools-2.0.0.tar.gz", hash = "sha256:7abe6f9c3f02a46492d043668913a68a5de8f7eec8001bed6cb0c4a7c5a0cbf5"},
 ]
 
 [package.dependencies]
 azure-core = ">=1.30.1,<2.0.0"
 azure-identity = ">=1.15.0,<2.0.0"
-azure-mgmt-network = ">=27.0.0,<28.0.0"
-azure-mgmt-redhatopenshift = ">=1.4.0,<2.0.0"
+azure-mgmt-network = ">=28.0.0,<29.0.0"
+azure-mgmt-redhatopenshift = ">=2.0.0,<3.0.0"
 azure-mgmt-resource = ">=23.0.1,<24.0.0"
 azure-mgmt-subscription = ">=3.1.1,<4.0.0"
 boto3 = ">=1.34.110,<2.0.0"
@@ -2296,4 +2296,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f9e5d54e0d574da19de52620437f91e2846eeca9adb747c1879de31bc5570313"
+content-hash = "78e76d3d86162829a921a02483e986500e2ff8b14896be07641dab7ab8028f2c"
