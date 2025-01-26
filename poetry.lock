@@ -1336,25 +1336,25 @@ urllib3 = ">=1.25.3"
 
 [[package]]
 name = "openshift-cluster-management-python-wrapper"
-version = "2.0.10"
+version = "2.0.11"
 description = "Wrapper around https://github.com/openshift/openshift-cluster-management-python-client"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "~=3.9"
 files = [
-    {file = "openshift_cluster_management_python_wrapper-2.0.10.tar.gz", hash = "sha256:919b71bb55523dc20510a0b463e860ad9f1304ad59507170dee6de99cf114a71"},
+    {file = "openshift_cluster_management_python_wrapper-2.0.11.tar.gz", hash = "sha256:c83fb700678b28ec65092e2bf6ca2f933795a9133605f796be818d2332ecea7d"},
 ]
 
 [package.dependencies]
-colorlog = ">=6.7.0,<7.0.0"
-importlib = ">=1.0.4,<2.0.0"
+colorlog = ">=6.7.0,<7"
+importlib = ">=1.0.4,<2"
 openshift-cluster-management-python-client = ">=1.0.23"
 openshift-python-utilities = ">=5.0.0"
 openshift-python-wrapper = ">=11.0.14"
 python-benedict = "0.33.2"
 python-simple-logger = ">=1.0.5"
-pyyaml = ">=6.0.1,<7.0.0"
+pyyaml = ">=6.0.1,<7"
 redhat-qe-cloud-tools = ">=1.0.10"
-requests = ">=2.31.0,<3.0.0"
+requests = ">=2.31.0,<3"
 rosa-python-client = "*"
 timeout-sampler = ">=0.0.2"
 
@@ -1888,16 +1888,16 @@ six = "*"
 
 [[package]]
 name = "python-simple-logger"
-version = "2.0.3"
+version = "2.0.4"
 description = "A simple logger for python"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "~=3.9"
 files = [
-    {file = "python_simple_logger-2.0.3.tar.gz", hash = "sha256:8bc1b66ef567dd700945c7103287e5284dd1941d117c6d66f6a66a63b214d7da"},
+    {file = "python_simple_logger-2.0.4.tar.gz", hash = "sha256:9ace48532dd9ded3a7e10e2d95f46eed2e48ce7cea4ca40c55d098aa8d4ddca3"},
 ]
 
 [package.dependencies]
-colorlog = ">=6.7.0,<7.0.0"
+colorlog = ">=6.7.0,<7"
 
 [[package]]
 name = "python-slugify"
