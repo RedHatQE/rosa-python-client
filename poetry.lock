@@ -1888,12 +1888,12 @@ six = "*"
 
 [[package]]
 name = "python-simple-logger"
-version = "2.0.5"
+version = "2.0.6"
 description = "A simple logger for python"
 optional = false
 python-versions = "~=3.9"
 files = [
-    {file = "python_simple_logger-2.0.5.tar.gz", hash = "sha256:22f75d7c2ea306c3184c99b9e9818b84a0320a6f2f77509fd8255b9f3cf96667"},
+    {file = "python_simple_logger-2.0.6.tar.gz", hash = "sha256:c86de59cea69af8edc58b06d2c2008c0035d2f8a9ee6166f002360bac02c50fc"},
 ]
 
 [package.dependencies]
@@ -2007,12 +2007,12 @@ files = [
 
 [[package]]
 name = "redhat-qe-cloud-tools"
-version = "2.0.8"
+version = "2.0.9"
 description = "Python utilities to manage cloud services, such as AWS."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "redhat_qe_cloud_tools-2.0.8.tar.gz", hash = "sha256:e1f3c29f55fb0759fcd9726447f14b3fd636ed1444b3c30b61fd2d71635ea616"},
+    {file = "redhat_qe_cloud_tools-2.0.9.tar.gz", hash = "sha256:25fae7219068e107274c28fd223358cee8eab480bdc9d20640b1a98df06a84b4"},
 ]
 
 [package.dependencies]
