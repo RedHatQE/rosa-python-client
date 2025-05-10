@@ -1889,16 +1889,20 @@ six = "*"
 
 [[package]]
 name = "python-simple-logger"
-version = "2.0.10"
+version = "2.0.12"
 description = "A simple logger for python"
 optional = false
 python-versions = "~=3.9"
 files = [
-    {file = "python_simple_logger-2.0.10.tar.gz", hash = "sha256:082a98eb374b0a22925d8354ea7515d0d21659f756c29f405dc9ab44c7786617"},
+    {file = "python_simple_logger-2.0.12.tar.gz", hash = "sha256:6311940638bad71c6b80f0591aaf3b36a7c9110056eab3544709c2ee676ffdb9"},
 ]
 
 [package.dependencies]
 colorlog = ">=6.7.0,<7"
+
+[package.extras]
+dev = ["ipdb (>=0.13.13)", "ipython (>=8.18.1)"]
+tests = ["pytest (>=8.3.5)", "pytest-cov (>=6.1.1)"]
 
 [[package]]
 name = "python-slugify"
@@ -2008,12 +2012,12 @@ files = [
 
 [[package]]
 name = "redhat-qe-cloud-tools"
-version = "2.0.14"
+version = "2.0.15"
 description = "Python utilities to manage cloud services, such as AWS."
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "redhat_qe_cloud_tools-2.0.14.tar.gz", hash = "sha256:db62118cedf236c268fb28e5c8b712ee1197461a6144fa5577affa330dd58f42"},
+    {file = "redhat_qe_cloud_tools-2.0.15.tar.gz", hash = "sha256:b337d3a8dd06001d1c21762856351bdc4a2c425ad03a5fbf0ead8bced4f3e063"},
 ]
 
 [package.dependencies]
