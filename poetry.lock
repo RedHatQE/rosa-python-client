@@ -1916,12 +1916,12 @@ six = "*"
 
 [[package]]
 name = "python-simple-logger"
-version = "2.0.15"
+version = "2.0.16"
 description = "A simple logger for python"
 optional = false
-python-versions = "~=3.9"
+python-versions = ">=3.9"
 files = [
-    {file = "python_simple_logger-2.0.15.tar.gz", hash = "sha256:0a8d355e0e91c363e649fe37bda2fad9d5d13dde18c029a7a030c97e796a9ca9"},
+    {file = "python_simple_logger-2.0.16.tar.gz", hash = "sha256:1e89f01568dab7ad16732b2fd3f0fd1fe9cefc05e0073abcef305b1efa5533a7"},
 ]
 
 [package.dependencies]
