@@ -1932,12 +1932,12 @@ six = "*"
 
 [[package]]
 name = "python-simple-logger"
-version = "2.0.16"
+version = "2.0.17"
 description = "A simple logger for python"
 optional = false
 python-versions = ">=3.9"
 files = [
-    {file = "python_simple_logger-2.0.16.tar.gz", hash = "sha256:1e89f01568dab7ad16732b2fd3f0fd1fe9cefc05e0073abcef305b1efa5533a7"},
+    {file = "python_simple_logger-2.0.17.tar.gz", hash = "sha256:698c18edf7622322213d66272fdc6be3162ad8432eae66101919cf96f8eb82f0"},
 ]
 
 [package.dependencies]
@@ -2055,28 +2055,28 @@ files = [
 
 [[package]]
 name = "redhat-qe-cloud-tools"
-version = "2.0.18"
+version = "2.0.19"
 description = "Python utilities to manage cloud services, such as AWS."
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = "<4,>=3.9"
 files = [
-    {file = "redhat_qe_cloud_tools-2.0.18.tar.gz", hash = "sha256:56855c54ad8ebd05420897472a4c0a9535764fa593f93aef71d5d6a285d1438d"},
+    {file = "redhat_qe_cloud_tools-2.0.19.tar.gz", hash = "sha256:d3c37cc043706996dc54ac85314789af0df5c0d9e3d03d5a5f270ddf2c53fc0f"},
 ]
 
 [package.dependencies]
-azure-core = ">=1.30.1,<2.0.0"
-azure-identity = ">=1.15.0,<2.0.0"
-azure-mgmt-network = ">=29.0.0,<30.0.0"
-azure-mgmt-redhatopenshift = ">=2.0.0,<3.0.0"
-azure-mgmt-resource = ">=24.0.0,<25.0.0"
-azure-mgmt-subscription = ">=3.1.1,<4.0.0"
-boto3 = ">=1.34.110,<2.0.0"
-click = ">=8.1.4,<9.0.0"
-colorlog = ">=6.7.0,<7.0.0"
-configparser = ">=7.0.0,<8.0.0"
-google-cloud-compute = ">=1.14.1,<2.0.0"
-openshift-python-utilities = ">=6.0.0,<7.0.0"
-pyhelper-utils = ">=1.0.0,<2.0.0"
+azure-core = ">=1.30.1,<2"
+azure-identity = ">=1.15.0,<2"
+azure-mgmt-network = ">=29.0.0,<30"
+azure-mgmt-redhatopenshift = ">=2.0.0,<3"
+azure-mgmt-resource = ">=24.0.0,<25"
+azure-mgmt-subscription = ">=3.1.1,<4"
+boto3 = ">=1.34.110,<2"
+click = ">=8.1.4,<9"
+colorlog = ">=6.7.0,<7"
+configparser = ">=7.0.0,<8"
+google-cloud-compute = ">=1.14.1,<2"
+openshift-python-utilities = ">=6.0.0,<7"
+pyhelper-utils = ">=1.0.0,<2"
 python-simple-logger = ">=1.0.5"
 
 [[package]]
