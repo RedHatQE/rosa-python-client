@@ -2435,10 +2435,7 @@ name = "rosa-python-client"
 version = "2.0.16"
 source = { editable = "." }
 dependencies = [
-    { name = "coverage" },
     { name = "openshift-cluster-management-python-wrapper" },
-    { name = "pytest-cov" },
-    { name = "pytest-mock" },
     { name = "python-benedict" },
     { name = "python-simple-logger" },
     { name = "redhat-qe-cloud-tools" },
@@ -2451,15 +2448,15 @@ dev = [
     { name = "ipython", version = "9.7.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
 tests = [
+    { name = "coverage" },
     { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-mock" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "coverage", specifier = ">=7.6.0,<8" },
     { name = "openshift-cluster-management-python-wrapper" },
-    { name = "pytest-cov", specifier = ">=7.0.0,<8" },
-    { name = "pytest-mock", specifier = ">=3.14.0,<4" },
     { name = "python-benedict", specifier = "==0.33.2" },
     { name = "python-simple-logger", specifier = ">=1.0.5" },
     { name = "redhat-qe-cloud-tools", specifier = ">=1.0.19" },
@@ -2470,7 +2467,12 @@ dev = [
     { name = "ipdb", specifier = ">=0.13.13,<0.14" },
     { name = "ipython" },
 ]
-tests = [{ name = "pytest", specifier = ">=8.0.0,<9" }]
+tests = [
+    { name = "coverage", specifier = ">=7.6.0,<8" },
+    { name = "pytest", specifier = ">=8.0.0,<9" },
+    { name = "pytest-cov", specifier = ">=7.0.0,<8" },
+    { name = "pytest-mock", specifier = ">=3.14.0,<4" },
+]
 
 [[package]]
 name = "rpds-py"

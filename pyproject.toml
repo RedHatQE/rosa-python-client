@@ -14,9 +14,7 @@ dependencies = [
   "redhat-qe-cloud-tools>=1.0.19",
   "python-simple-logger>=1.0.5",
   "python-benedict==0.33.2",
-  "pytest-mock>=3.14.0,<4",
-  "pytest-cov>=7.0.0,<8",
-  "coverage>=7.6.0,<8",
+
   "openshift-cluster-management-python-wrapper",
 ]
 
@@ -31,7 +29,12 @@ omit = ["rosa/tests/*"]
 
 [dependency-groups]
 dev = ["ipdb>=0.13.13,<0.14", "ipython"]
-tests = ["pytest>=8.0.0,<9"]
+tests = [
+  "pytest>=8.0.0,<9",
+  "pytest-mock>=3.14.0,<4",
+  "pytest-cov>=7.0.0,<8",
+  "coverage>=7.6.0,<8",
+]
 
 [tool.coverage.report]
 fail_under = 60
