@@ -1,12 +1,56 @@
+[project]
+name = "rosa-python-client"
+version = "2.0.16"
+description = "Wrapper for rosa cli"
+authors = [{ name = "Meni Yakove", email = "myakove@gmail.com" }]
+requires-python = ">=3.10"
+readme = "README.md"
+license = "Apache-2.0"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "redhat-qe-cloud-tools>=1.0.19",
+  "python-simple-logger>=1.0.5",
+  "python-benedict==0.33.2",
+
+  "openshift-cluster-management-python-wrapper",
+]
+
+[project.urls]
+Homepage = "https://github.com/RedHatQE/rosa-python-client"
+Documentation = "https://github.com/RedHatQE/rosa-python-client/blob/main/README.md"
+Download = "https://pypi.org/project/rosa-python-client/"
+"Bug Tracker" = "https://github.com/RedHatQE/rosa-python-client/issues"
+
 [tool.coverage.run]
 omit = ["rosa/tests/*"]
+
+[dependency-groups]
+dev = ["ipdb>=0.13.13,<0.14", "ipython"]
+tests = [
+  "pytest>=8.0.0,<9",
+  "pytest-mock>=3.14.0,<4",
+  "pytest-cov>=7.0.0,<8",
+  "coverage>=7.6.0,<8",
+]
 
 [tool.coverage.report]
 fail_under = 60
 skip_empty = true
 
+[tool.uv]
+default-groups = ["dev", "tests"]
+
 [tool.coverage.html]
 directory = ".tests_coverage"
+
+[tool.hatch.build.targets.sdist]
+include = ["rosa"]
+
+[tool.hatch.build.targets.wheel]
+include = ["rosa"]
 
 [tool.ruff]
 preview = true
@@ -17,49 +61,6 @@ output-format = "grouped"
 [tool.ruff.format]
 exclude = [".git", ".venv", ".mypy_cache", ".tox", "__pycache__"]
 
-[tool.poetry]
-name = "rosa-python-client"
-version = "1.0.121"
-description = "Wrapper for rosa cli"
-authors = ["Meni Yakove <myakove@gmail.com>"]
-readme = "README.md"
-packages = [{ include = "rosa" }]
-license = "Apache-2.0"
-homepage = "https://github.com/RedHatQE/rosa-python-client"
-documentation = "https://github.com/RedHatQE/rosa-python-client/blob/main/README.md"
-classifiers = [
-  "Programming Language :: Python :: 3",
-  "Operating System :: OS Independent",
-]
-
-[tool.poetry.dependencies]
-python = "^3.9"
-redhat-qe-cloud-tools = ">=1.0.19"
-python-simple-logger = ">=1.0.5"
-python-benedict = "==0.33.2"
-pytest-mock = "^3.14.0"
-pytest-cov = "^7.0.0"
-coverage = "^7.6.0"
-openshift-cluster-management-python-wrapper = "*"
-
-[tool.poetry.group.dev.dependencies]
-ipdb = "^0.13.13"
-ipython = "*"
-
-[tool.poetry.urls]
-Download = "https://pypi.org/project/rosa-python-client/"
-"Bug Tracker" = "https://github.com/RedHatQE/rosa-python-client/issues"
-
-[tool.poetry.group.tests.dependencies]
-pytest = "^8.0.0"
-
 [build-system]
-requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
-build-backend = "poetry_dynamic_versioning.backend"
-
-[tool.poetry-dynamic-versioning.substitution]
-files = ["VERSION"]
-
-[tool.poetry-dynamic-versioning]
-enable = true
-pattern = "((?P<epoch>\\d+)!)?(?P<base>\\d+(\\.\\d+)*)"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
