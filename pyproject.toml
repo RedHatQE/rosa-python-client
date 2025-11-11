@@ -30,7 +30,7 @@ omit = ["rosa/tests/*"]
 [dependency-groups]
 dev = ["ipdb>=0.13.13,<0.14", "ipython"]
 tests = [
-  "pytest>=8.0.0,<9",
+  "pytest>=9,<10",
   "pytest-mock>=3.14.0,<4",
   "pytest-cov>=7.0.0,<8",
   "coverage>=7.6.0,<8",
