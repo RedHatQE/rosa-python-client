@@ -197,7 +197,7 @@ def parse_help():
 
         sub_commands = get_available_commands(command=["rosa"] + commands_search_path)
         for sub_command in sub_commands:
-            commands_dict[commands_search_path, sub_command] = {}
+            commands_dict[commands_search_path + [sub_command]] = {}
             commands_dict = _fill_commands_dict_with_support_flags(
                 commands_dict=commands_dict,
                 flag_key_path=commands_search_path + [sub_command],
