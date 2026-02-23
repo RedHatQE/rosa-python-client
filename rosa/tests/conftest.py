@@ -8,7 +8,7 @@ def path_from_dict(_dict=None, _path=""):
     for key, val in _dict.items():
         # If dict == end_values we need to test it
         if isinstance(val, dict):
-            if all([_key in end_values for _key in val.keys()]):
+            if all(_key in end_values for _key in val):
                 yield {
                     "command": f"{_path}{key}",
                     AWS_REGION_STR: AWS_REGION_STR if val["region"] else None,
