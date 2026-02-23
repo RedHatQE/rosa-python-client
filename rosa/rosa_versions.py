@@ -1,15 +1,15 @@
 import re
-from typing import Dict, List
 from functools import lru_cache
 
-import rosa.cli
 from ocm_python_wrapper.ocm_client import OCMPythonClient
+
+import rosa.cli
 
 
 @lru_cache
 def get_rosa_versions(
     ocm_client: OCMPythonClient, aws_region: str, channel_group: str = "stable", hosted_cp: bool = False
-) -> Dict[str, Dict[str, List[str]]]:
+) -> dict[str, dict[str, list[str]]]:
     """
     Get all rosa versions for specified channel group.
 
@@ -29,13 +29,13 @@ def get_rosa_versions(
                        '4.15': ['4.15.32', '4.15.31', '4.15.30', '4.15.29', '4.15.28', '4.15.27']}}
 
     """
-    rosa_base_available_versions_dict: Dict = {}
+    rosa_base_available_versions_dict: dict = {}
     base_available_versions = rosa.cli.execute(
         command=(f"list versions --channel-group={channel_group} {'--hosted-cp' if hosted_cp else ''}"),
         aws_region=aws_region,
         ocm_client=ocm_client,
     )["out"]
-    _all_versions: List = [ver["raw_id"] for ver in base_available_versions]
+    _all_versions: list = [ver["raw_id"] for ver in base_available_versions]
     rosa_base_available_versions_dict[channel_group] = {}
     for _version in _all_versions:
         _version_key = re.findall(r"^\d+.\d+", _version)[0]

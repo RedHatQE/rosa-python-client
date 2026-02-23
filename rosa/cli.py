@@ -11,7 +11,6 @@ from clouds.aws.aws_utils import set_and_verify_aws_credentials
 from ocm_python_wrapper.ocm_client import OCMPythonClient
 from simple_logger.logger import get_logger
 
-
 LOGGER = get_logger(name=__name__)
 TIMEOUT_5MIN = 5 * 60
 
@@ -52,15 +51,14 @@ def rosa_login(env, token, aws_region, allowed_commands=None):
 
     try:
         is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region, env=env)
-        LOGGER.info(f"Already logged in to {env} [region: {aws_region}].")
-        return
-
     except NotLoggedInOrWrongEnvError:
         build_execute_command(
             command=f"login --env={env} --token={token}",
             allowed_commands=_allowed_commands,
         )
         is_logged_in(allowed_commands=_allowed_commands, aws_region=aws_region, env=env)
+    else:
+        LOGGER.info(f"Already logged in to {env} [region: {aws_region}].")
 
 
 def rosa_logout(allowed_commands=None):
@@ -102,7 +100,7 @@ def execute_command(command, wait_timeout=TIMEOUT_5MIN):
     log = f"Executing command: {' '.join(command)}, waiting for {wait_timeout} seconds."
     hashed_log = hash_log_keys(log=log)
     LOGGER.info(hashed_log)
-    res = subprocess.run(command, capture_output=True, text=True, timeout=wait_timeout)
+    res = subprocess.run(command, capture_output=True, text=True, timeout=wait_timeout, check=False)
     if res.returncode != 0:
         raise CommandExecuteError(f"Failed to execute '{hashed_log}': {res.stderr}")
 
