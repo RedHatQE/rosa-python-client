@@ -1,6 +1,6 @@
 import pytest
-from rosa.cli import is_logged_in, NotLoggedInOrWrongEnvError
 
+from rosa.cli import NotLoggedInOrWrongEnvError, is_logged_in
 
 ROSA_ENV = "rosa_env"
 AWS_REGION_STR = "us-east-1"
