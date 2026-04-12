@@ -1674,7 +1674,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/f9/1f/ddb9e61bbe90b59f6
 
 [[package]]
 name = "openshift-cluster-management-python-wrapper"
-version = "2.0.11"
+version = "1.0.140"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorlog" },
@@ -1690,7 +1690,7 @@ dependencies = [
     { name = "rosa-python-client" },
     { name = "timeout-sampler" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/80/0b/e188af356fbcffd03e2b0cb594a2929156ac0373a5a817dc2aede0b41917/openshift_cluster_management_python_wrapper-2.0.11.tar.gz", hash = "sha256:c83fb700678b28ec65092e2bf6ca2f933795a9133605f796be818d2332ecea7d", size = 15716, upload-time = "2025-01-26T09:56:28.036Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/81/d0e31bf434fae34dcd61d1d7a86b9499e599fc0dad396b8f3110887ed71b/openshift_cluster_management_python_wrapper-1.0.140.tar.gz", hash = "sha256:619852226ae4f9b174758936887ef758bdf22aae982dfb639884ccba578323ce", size = 15946, upload-time = "2024-10-20T10:38:23.382Z" }
 
 [[package]]
 name = "openshift-python-utilities"
@@ -2247,16 +2247,18 @@ wheels = [
 
 [[package]]
 name = "python-benedict"
-version = "0.33.2"
+version = "0.35.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "python-fsutil" },
     { name = "python-slugify" },
     { name = "requests" },
+    { name = "typing-extensions" },
+    { name = "useful-types" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/57/63/a3d1de78d75b28e9105c236565b9f0366e009abb489a5acb09911fcf5768/python-benedict-0.33.2.tar.gz", hash = "sha256:662de43bffb4e127da2056447f8ddd7f6f5c89b72dd66d289cf9abd1cc2720c8", size = 53224, upload-time = "2024-03-04T23:25:42.408Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bc/7f/670cea45a5de7ba79b820b9e58c19ec28070e65f8fe4584edc14b3b86ff2/python_benedict-0.35.0.tar.gz", hash = "sha256:ca825742cb60641939857417b799c6ca6680ba1ed7d3a92cf722103bc8dcb3ea", size = 58486, upload-time = "2025-09-30T22:57:42.206Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/68/5f/e32644b743d33142c6c43af50c86c6a5f535c3b3fa5b50c92aecded37741/python_benedict-0.33.2-py3-none-any.whl", hash = "sha256:50a69b601b34d4ad7b67fe94e3266ec05046bc547a4132fe43fd8fbd41aeefaa", size = 51285, upload-time = "2024-03-04T23:25:39.899Z" },
+    { url = "https://files.pythonhosted.org/packages/b6/ae/76f758e10b04c00f26c1613d8c77a078a3001d8ec439ec9e992d7c5a9268/python_benedict-0.35.0-py3-none-any.whl", hash = "sha256:4be33761812a2b8986b19f9dcb9df687feefd81c4cbb11becd044a5e28c340f6", size = 59905, upload-time = "2025-09-30T22:57:40.637Z" },
 ]
 
 [[package]]
@@ -2546,7 +2548,7 @@ tests = [
 [package.metadata]
 requires-dist = [
     { name = "openshift-cluster-management-python-wrapper" },
-    { name = "python-benedict", specifier = "==0.33.2" },
+    { name = "python-benedict", specifier = "==0.35.0" },
     { name = "python-simple-logger", specifier = ">=1.0.5" },
     { name = "redhat-qe-cloud-tools", specifier = ">=1.0.19" },
 ]
@@ -2921,6 +2923,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3/urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed", size = 435556, upload-time = "2026-01-07T16:24:43.925Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4", size = 131584, upload-time = "2026-01-07T16:24:42.685Z" },
+]
+
+[[package]]
+name = "useful-types"
+version = "0.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/92/d6/0d6db1f8766e9b5e7ec259666c40ceae6bbb9326caf50e08717639e167b7/useful_types-0.2.1.tar.gz", hash = "sha256:870a0bcc8fcb7d0b2f14055438c1cab7e248fded942b0943a4d7019e7fbbdacd", size = 4748, upload-time = "2024-04-20T08:58:15.195Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/13/23/c194fd6c6258727f694e22b106c262c7d2678049dbc2d2045743e235f43a/useful_types-0.2.1-py3-none-any.whl", hash = "sha256:0dca32763d7271b5c8c7c395c44c10d09dba47a41aec97dcb085041ad096e0e9", size = 5382, upload-time = "2024-04-20T08:58:13.759Z" },
 ]
 
 [[package]]

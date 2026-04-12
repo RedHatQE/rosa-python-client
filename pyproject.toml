@@ -13,7 +13,7 @@ classifiers = [
 dependencies = [
   "redhat-qe-cloud-tools>=1.0.19",
   "python-simple-logger>=1.0.5",
-  "python-benedict==0.33.2",
+  "python-benedict==0.35.0",
 
   "openshift-cluster-management-python-wrapper",
 ]
