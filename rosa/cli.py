@@ -70,8 +70,10 @@ def rosa_logout(allowed_commands=None):
 def change_home_environment():
     current_home = os.environ.get("HOME")
     os.environ["HOME"] = "/tmp/"
-    yield
-    os.environ["HOME"] = current_home
+    try:
+        yield
+    finally:
+        os.environ["HOME"] = current_home
 
 
 def is_logged_in(env, aws_region=None, allowed_commands=None):
@@ -109,10 +111,7 @@ def execute_command(command, wait_timeout=TIMEOUT_5MIN):
 
 def check_flag_in_flags(command_list, flag_str):
     available_flags = get_available_flags(command=command_list)
-    for flag in available_flags:
-        if flag_str in flag:
-            return True
-    return False
+    return any(flag_str in flag for flag in available_flags)
 
 
 def build_command(command, allowed_commands=None, aws_region=None):
