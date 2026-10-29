@@ -1,11 +1,11 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.15'",
     "python_full_version == '3.14.*'",
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'emscripten'",
-    "(python_full_version >= '3.11.5' and python_full_version < '3.14' and sys_platform != 'emscripten') or (python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform == 'emscripten')",
+    "(python_full_version >= '3.11.5' and python_full_version < '3.12') or (python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten')",
     "python_full_version < '3.11.5'",
 ]
 
@@ -2528,15 +2528,15 @@ wheels = [
 
 [[package]]
 name = "python-benedict"
-version = "0.39.0"
+version = "0.40.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "python-slugify" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4e/fc/0ad1bb141342e093c1d2109ad3f61d4740d7a79ee7c750474055ace9d939/python_benedict-0.39.0.tar.gz", hash = "sha256:b0ce8041e6df1ae5d029e78c3725764737330280560480b9aad8774410ee5c5e", size = 66172, upload-time = "2026-09-29T10:55:01.227Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/03/2f/7ffab590225f6cfe0e83517ca1a128904f8e9e287b52d8b65e160319f0e5/python_benedict-0.40.1.tar.gz", hash = "sha256:2a6feb884b6055e0b1669d5d2ff838d01d7dbe29f3982e4c86886979e1967e6d", size = 68402, upload-time = "2026-10-20T16:54:36.341Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f2/32/0e908c054c78c17beb8b0627d4d2ac494122ca69219598dc2392b028da6e/python_benedict-0.39.0-py3-none-any.whl", hash = "sha256:549b6c7b7ed67035e8d2471ab93317cb2f0c3894c103e5ed5bdf72699ba327dc", size = 65372, upload-time = "2026-09-29T10:54:59.521Z" },
+    { url = "https://files.pythonhosted.org/packages/23/af/eb72e4ed7bd8955b01fb02fb52cc973d9c5c27926a851a3589ee4e583e8c/python_benedict-0.40.1-py3-none-any.whl", hash = "sha256:23d20f9dd99625ed12cc4fa59cb3b46ea6987ce502b1219ddb84d6947a427f49", size = 67092, upload-time = "2026-10-20T16:54:34.798Z" },
 ]
 
 [[package]]
@@ -2784,6 +2784,7 @@ wheels = [
 name = "rosa-python-client"
 version = "2.0.16"
 source = { editable = "." }
+default-groups = ["dev", "tests"]
 dependencies = [
     { name = "openshift-cluster-management-python-wrapper" },
     { name = "python-benedict" },
@@ -2806,7 +2807,7 @@ tests = [
 [package.metadata]
 requires-dist = [
     { name = "openshift-cluster-management-python-wrapper" },
-    { name = "python-benedict", specifier = "==0.39.0" },
+    { name = "python-benedict", specifier = "==0.40.1" },
     { name = "python-simple-logger", specifier = ">=1.0.5" },
     { name = "redhat-qe-cloud-tools", specifier = ">=1.0.19" },
 ]
@@ -3021,7 +3022,7 @@ resolution-markers = [
     "python_full_version >= '3.15'",
     "python_full_version == '3.14.*'",
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'emscripten'",
-    "(python_full_version >= '3.11.5' and python_full_version < '3.14' and sys_platform != 'emscripten') or (python_full_version >= '3.11.5' and python_full_version < '3.12' and sys_platform == 'emscripten')",
+    "(python_full_version >= '3.11.5' and python_full_version < '3.12') or (python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten')",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/19/63/0b6bae54546aed98d72f12d09df57b19a287f01c84d22047fa2e23772ab9/soupsieve-3.0.4.tar.gz", hash = "sha256:924fab84ae21604c19e175e1f39815eb6fa83ba23836e09e9de180925e5bc4c0", size = 119017, upload-time = "2026-10-22T00:45:26.362Z" }
 wheels = [
