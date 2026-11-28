@@ -2260,15 +2260,15 @@ wheels = [
 
 [[package]]
 name = "python-benedict"
-version = "0.40.1"
+version = "0.41.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "python-slugify" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/03/2f/7ffab590225f6cfe0e83517ca1a128904f8e9e287b52d8b65e160319f0e5/python_benedict-0.40.1.tar.gz", hash = "sha256:2a6feb884b6055e0b1669d5d2ff838d01d7dbe29f3982e4c86886979e1967e6d", size = 68402, upload-time = "2026-10-20T16:54:36.341Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4a/99/a6aa8be5003dc75c50e4cb5b4bb40f771733b780a2f0314d916519dccc1d/python_benedict-0.41.0.tar.gz", hash = "sha256:e1dc1394cd66f110ff3f29bb31af0c1985e6b503107f6841507941f92306a91d", size = 69654, upload-time = "2026-11-28T10:11:28.761Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/23/af/eb72e4ed7bd8955b01fb02fb52cc973d9c5c27926a851a3589ee4e583e8c/python_benedict-0.40.1-py3-none-any.whl", hash = "sha256:23d20f9dd99625ed12cc4fa59cb3b46ea6987ce502b1219ddb84d6947a427f49", size = 67092, upload-time = "2026-10-20T16:54:34.798Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/fa/13aeb27197827bdcc8509ece14c68e928db361322b792512be4869cd0988/python_benedict-0.41.0-py3-none-any.whl", hash = "sha256:95becf5c9d9e41df4ae9073c777a8788d791af050db425c97ec026197fdea2e9", size = 68370, upload-time = "2026-11-28T10:11:27.208Z" },
 ]
 
 [[package]]
@@ -2527,7 +2527,7 @@ tests = [
 [package.metadata]
 requires-dist = [
     { name = "openshift-cluster-management-python-wrapper" },
-    { name = "python-benedict", specifier = "==0.40.1" },
+    { name = "python-benedict", specifier = "==0.41.0" },
     { name = "python-simple-logger", specifier = ">=1.0.5" },
     { name = "redhat-qe-cloud-tools", specifier = ">=1.0.19" },
 ]
